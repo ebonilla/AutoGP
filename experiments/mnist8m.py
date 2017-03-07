@@ -15,7 +15,7 @@ import gzip
 import os
 
 
-DATA_DIR = "experiments/data/mnist8m/"
+DATA_DIR = "experiments/data/infimnist/"
 TRAIN_INPUTS = DATA_DIR + "train-patterns.gz"
 TRAIN_OUTPUTS = DATA_DIR + "train-labels.gz"
 TEST_INPUTS = DATA_DIR + "test-patterns.gz"
@@ -64,10 +64,18 @@ def process_mnist(images, dtype = dtypes.float32, reshape=True):
 
     return images
 
+
+def get_mnist8m_data():
+    print "Getting mnist8m data ..."
+    os.chdir('experiments/data')
+    subprocess.call(["./get_mnist8m_data.sh"])
+    os.chdir("../../")
+    print "done"
+
 def import_mnist():
-    os.chdir(DATA_DIR)
-    subprocess.call(["./generate_data.sh"])
-    os.chdir("../../../")
+    if os.path.isdir(DATA_DIR) is False: # directory does not exist, download the data
+        get_mnist8m_data()
+
     with open(TRAIN_INPUTS) as f:
         train_images = extract_images(f)
         train_images = process_mnist(train_images)
