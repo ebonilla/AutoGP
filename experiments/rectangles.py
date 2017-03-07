@@ -6,16 +6,16 @@ from autogp import losses
 from autogp import util
 import numpy as np
 import os
+import subprocess
 import pandas as pd
 import sklearn.cluster
 import sklearn.preprocessing
 import tensorflow as tf
 import zipfile
 
-REC_DIR = "experiments/data/rectangles"
-ZIP_PATH = "experiments/data/rectangles/rec.zip"
-TRAIN_PATH = "experiments/data/rectangles/train"
-TEST_PATH = "experiments/data/rectangles/test"
+DATA_DIR = "experiments/data/"
+TRAIN_PATH = DATA_DIR + "rectangles_im_train.amat"
+TEST_PATH = DATA_DIR + "rectangles_im_test.amat"
 
 def init_z(train_inputs, num_inducing):
     # Initialize inducing points using clustering.
@@ -24,10 +24,17 @@ def init_z(train_inputs, num_inducing):
     inducing_locations = mini_batch.cluster_centers_
     return inducing_locations
 
-if not os.path.exists(TRAIN_PATH):
-   zip_ref = zipfile.ZipFile(ZIP_PATH, "r")
-   zip_ref.extractall(REC_DIR)
-   zip_ref.close()
+def get_rectangles_images_data():
+    print "Getting rectangles images data ..."
+    os.chdir('experiments/data')
+    subprocess.call(["./get_rectangles_images_data.sh"])
+    os.chdir("../../")
+    print "done"
+
+
+# Gettign the data
+if os.path.exists(DATA_DIR) is False:  # directory does not exist, download the data
+    get_rectangles_images_data()
 
 FLAGS = util.get_flags()
 BATCH_SIZE = FLAGS.batch_size
@@ -47,9 +54,8 @@ DEGREE = FLAGS.kernel_degree
 DEPTH  = FLAGS.kernel_depth
 
 # Read in and scale the data.
-enc = sklearn.preprocessing.OneHotEncoder()
-train_data = pd.read_csv(TRAIN_PATH, header=None)
-test_data = pd.read_csv(TEST_PATH, header=None)
+train_data = pd.read_csv(TRAIN_PATH, sep=r"\s+", header=None)
+test_data = pd.read_csv(TEST_PATH, sep=r"\s+", header=None)
 train_X = train_data.values[:, :-1]
 train_Y = train_data.values[:, -1:]
 test_X = test_data.values[:, :-1]

@@ -2,3 +2,9 @@
 autogp/util/tf_ops/matpackops.so
 experiments/data/cifar-10-batches-py
 experiments/data/cifar-10-python.tar.gz
+experiments/data/MNIST_data
+experiments/data/infimnist.tar.gz
+experiments/data/infimnist/
+experiments/data/rectangles_images.zip
+experiments/data/rectangles_im_test.amat
+experiments/data/rectangles_im_train.amat
