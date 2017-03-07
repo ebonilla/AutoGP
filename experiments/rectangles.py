@@ -33,7 +33,7 @@ def get_rectangles_images_data():
 
 
 # Gettign the data
-if os.path.exists(DATA_DIR) is False:  # directory does not exist, download the data
+if os.path.exists(TRAIN_PATH) is False:  # directory does not exist, download the data
     get_rectangles_images_data()
 
 FLAGS = util.get_flags()
