@@ -127,10 +127,7 @@ class GaussianProcess(object):
                self.loo_loss, var_list=[self.raw_inducing_inputs] +
                                        self.raw_kernel_params +
                                        self.raw_likelihood_params)
-            self.var_train_step = optimizer.minimize(
-                self.nelbo, var_list=[self.raw_means, self.raw_covars, self.raw_weights])
             self.train_step = optimizer.minimize(self.nelbo)
-            #self.session.run(tf.initialize_all_variables())
             self.session.run(tf.global_variables_initializer())
 
         start = data.next_batch(batch_size)
