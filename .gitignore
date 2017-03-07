@@ -1,0 +1,2 @@
+*.pyc
+autogp/util/tf_ops/matpackops.so
