@@ -1,2 +1,4 @@
 *.pyc
 autogp/util/tf_ops/matpackops.so
+experiments/data/cifar-10-batches-py
+experiments/data/cifar-10-python.tar.gz

@@ -7,6 +7,10 @@ import tensorflow as tf
 from autogp import datasets
 from autogp import losses
 from autogp  import util
+import os
+import subprocess
+
+DATA_DIR = 'experiments/data/cifar-10-batches-py/'
 
 def init_z(train_inputs, num_inducing):
     # Initialize inducing points using clustering.
@@ -15,17 +19,28 @@ def init_z(train_inputs, num_inducing):
     inducing_locations = mini_batch.cluster_centers_
     return inducing_locations
 
+
+def get_cifar_data():
+    print "Getting cifar10 data ..."
+    os.chdir('experiments/data')
+    subprocess.call(["./get_cifar10_data.sh"])
+    os.chdir("../../")
+    print "done"
+
 def load_cifar():
+    if os.path.isdir(DATA_DIR) is False: # directory does not exist, download the data
+        get_cifar_data()
+
     import cPickle
     train_X = np.empty([0, 3072], dtype=np.float32)
     train_Y = np.empty([0, 10], dtype=np.float32)
     for i in xrange(1, 6):
-        f = open("experiments/data/cifar10/data_batch_" + str(i))
+        f = open(DATA_DIR + "data_batch_" + str(i))
         d = cPickle.load(f)
         f.close()
         train_X = np.concatenate([train_X, d["data"]])
         train_Y = np.concatenate([train_Y, np.eye(10)[d["labels"]]])
-    f = open("experiments/data/cifar10/test_batch")
+    f = open(DATA_DIR + "test_batch")
     d = cPickle.load(f)
     f.close()
     train_X = train_X / 255.0
