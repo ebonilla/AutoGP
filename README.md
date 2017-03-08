@@ -41,9 +41,10 @@ ypred, _ = model.predict(xtest)
 ```
 
 # Experiments and Advanced Settings
-All the experiments in the current version of the  [AutoGP paper](https://arxiv.org/abs/1610.05392) can be reproduced using the scripts in the `experiments` directory. The script `experiments/rectangles.py` is a good example of using more advanced settings regarding the available flags. The description of these flags can be found under `autogp/util/util.py`. Here we describe  how to call the `rectangles.py` script with all the available flags:
+All the experiments in the current version of the  [AutoGP paper](https://arxiv.org/abs/1610.05392) can be reproduced using the scripts in the `experiments` directory.
+The script `experiments/rectangles.py` is a good example of using more advanced settings regarding the available flags.
+The description of these flags can be found under `autogp/util/util.py`. Here we show the commands used in the [AutoGP paper's](https://arxiv.org/abs/1610.05392) experiments :
 ```
-PYTHONPATH=. python  experiments/rectangles.py --batch_size=500 --learning_rate=0.001 --var_steps=100 --loocv_steps=100 --n_epochs=1000 --display_step=10 --mc_train=1 --n_inducing=500  --is_ard=1  --lengthscale=10   --num_components=1
 PYTHONPATH=. python  experiments/rectangles.py --batch_size=1000 --learning_rate=0.003 --var_steps=50 --loocv_steps=0 --display_step=10 --mc_train=100 --n_inducing=10  --is_ard=1  --lengthscale=10   --num_components=1
 PYTHONPATH=. python  experiments/rectangles.py --batch_size=1000 --learning_rate=0.003 --var_steps=50 --loocv_steps=0 --display_step=10 --mc_train=100 --n_inducing=200  --is_ard=1  --lengthscale=10   --num_components=1
 PYTHONPATH=. python  experiments/rectangles.py --batch_size=1000 --learning_rate=0.003 --var_steps=50 --loocv_steps=0 --display_step=10 --mc_train=100 --n_inducing=1000  --is_ard=1  --lengthscale=10   --num_components=1
