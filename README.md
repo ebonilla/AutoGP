@@ -3,6 +3,13 @@ An implementation of the model described in [AutoGP: Exploring the Capabilities 
 
 The code was tested on Python 2.7 and [TensorFlow 0.12](https://www.tensorflow.org/get_started/os_setup).
 
+# Authors
+The original code was mainly developed by
+[Karl Krauth](https://github.com/Karl-Krauth) with some modifications by
+[Edwin Bonilla](https://github.com/ebonilla)
+and feedback from [Maurizio Filippone](https://github.com/mauriziofilippone) and [Kurt Cutajar](http://www.eurecom.fr/en/people/cutajar-kurt).
+
+
 # Installation
 You can download and install AutoGP using:
 ```
