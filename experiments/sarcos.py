@@ -1,4 +1,5 @@
 import os
+import subprocess
 import sklearn.cluster
 import numpy as np
 import autogp
@@ -9,6 +10,12 @@ from autogp import datasets
 from autogp import losses
 from autogp  import util
 import pandas
+import scipy.io as sio
+
+
+DATA_DIR = "experiments/data/"
+TRAIN_PATH = DATA_DIR + "sarcos_inv.mat"
+TEST_PATH = DATA_DIR + "sarcos_inv_test"
 
 def init_z(train_inputs, num_inducing):
     # Initialize inducing points using clustering.
@@ -16,6 +23,14 @@ def init_z(train_inputs, num_inducing):
     cluster_indices = mini_batch.fit_predict(train_inputs)
     inducing_locations = mini_batch.cluster_centers_
     return inducing_locations
+
+
+def get_sarcos_data():
+    print "Getting sarcos data ..."
+    os.chdir('experiments/data')
+    subprocess.call(["./get_sarcos_data.sh"])
+    os.chdir("../../")
+    print "done"
 
 
 def sarcos_all_joints_data():
@@ -27,20 +42,15 @@ def sarcos_all_joints_data():
     data : list
         A list of length = 1, where each element is a dictionary which contains ``train_outputs``,
         ``train_inputs``, ``test_outputs``, ``test_inputs``, and ``id``
-
-    References
-    ----------
-    * Data is originally from this website: http://www.gaussianprocess.org/gpml/data/.
-    The data here is directly imported from the Matlab code on Gaussian process networks.
-    The Matlab code to generate data is 'data/matlab_code_data/sarcos.m'
     """
-    train = pandas.read_csv(os.path.join('experiments/data/sarcos', 'train_all' +'.csv'), header=None)
-    test = pandas.read_csv(os.path.join('experiments/data/sarcos', 'test_all' + '.csv'), header=None)
-    return {
-        'train_outputs': train.ix[:, 0:6].values,
-        'train_inputs': train.ix[:, 7:].values,
-        'test_outputs': test.ix[:, 0:6].values,
-        'test_inputs': test.ix[:, 7:].values,
+
+    train = sio.loadmat(TRAIN_PATH)['sarcos_inv']
+    test = sio.loadmat(TEST_PATH)['sarcos_inv_test']
+    return{
+        'train_inputs': train[:, :21],
+        'train_outputs': train[:, 21:],
+        'test_inputs': test[:, :21],
+        'test_outputs': test[:, 21:],
         'id': 0
     }
 
@@ -54,6 +64,9 @@ if __name__ == '__main__':
     NUM_SAMPLES =  FLAGS.mc_train
     NUM_INDUCING = FLAGS.n_inducing
     IS_ARD = FLAGS.is_ard
+
+    if os.path.exists(TRAIN_PATH) is False:  # directory does not exist, download the data
+        get_sarcos_data()
 
     d = sarcos_all_joints_data()
     data = datasets.DataSet(d['train_inputs'].astype(np.float32), d['train_outputs'].astype(np.float32))
