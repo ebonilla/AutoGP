@@ -188,14 +188,15 @@ class GaussianProcess(object):
         return np.concatenate(pred_means, axis=0), np.concatenate(pred_vars, axis=0)
 
     def _print_state(self, data, test, loss, num_train):
-        nelbo = self.session.run(self.nelbo, feed_dict={self.train_inputs: data.X,
-                                                        self.train_outputs: data.Y,
-                                                        self.num_train: num_train})
-        loo = self.session.run(self.loo_loss, feed_dict={self.train_inputs: data.X,
-                                                         self.train_outputs: data.Y,
-                                                         self.num_train: num_train})
-        print("i=" + repr(data.epochs_completed) + " nelbo=" + repr(nelbo), end=" ")
-        print("loo=" + repr(loo))
+        if num_train <= 100000:
+            nelbo = self.session.run(self.nelbo, feed_dict={self.train_inputs: data.X,
+                                                            self.train_outputs: data.Y,
+                                                            self.num_train: num_train})
+            loo = self.session.run(self.loo_loss, feed_dict={self.train_inputs: data.X,
+                                                             self.train_outputs: data.Y,
+                                                             self.num_train: num_train})
+            print("i=" + repr(data.epochs_completed) + " nelbo=" + repr(nelbo), end=" ")
+            print("loo=" + repr(loo))
 
         if loss is not None:
             ypred = self.predict(test.X)[0]
