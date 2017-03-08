@@ -58,7 +58,8 @@ where the options given are:
 * --lengthscale: Initial lengthscale for all latent processes
 * --num_component: Number of mixture components in the approximate posterior 
 
-
+# Contact
+You can contact the authors of the  [AutoGP paper](https://arxiv.org/abs/1610.05392) in the given order, i.e. Karl Krauth (@Karl-Krauth) 
 # Acknowledgements
 The code to support triangular matrices operations under `autogp/util/tf_ops` was taken from the GPflow repository (Hensman, Matthews et al. GPflow, http://github.com/GPflow/GPflow, 2016).
 
