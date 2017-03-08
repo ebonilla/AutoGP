@@ -11,7 +11,7 @@ cd AutoGP
 python setup.py
 ```
 # Usage 
-The script `example.py`shows a very simple example on how to use AutoGP with the default settings. The main components are:
+The script `example.py`shows a very simple example of how to use AutoGP with the default settings. The main components are:
 
 * Create a Likelihood object 
 ```
