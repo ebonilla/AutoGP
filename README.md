@@ -29,7 +29,7 @@ inducing_inputs = xtrain
 ```
 model = autogp.GaussianProcess(likelihood, kernel, inducing_inputs)
 ```
-5. Select optimizer and train the model
+* Select optimizer and train the model
 ```
 optimizer = tf.train.RMSPropOptimizer(0.005)
 model.fit(data, optimizer, loo_steps=10, var_steps=20, epochs=30)
