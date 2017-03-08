@@ -13,29 +13,29 @@ python setup.py
 # Usage 
 The script `example.py`shows a very simple example on how to use AutoGP with the default settings. The main components are:
 
-1. Create a Likelihood object 
+* Create a Likelihood object 
 ```
 likelihood = autogp.likelihoods.Gaussian()
 ```
-2. Create a Kernel object
+* Create a Kernel object
 ```
 kernel = [autogp.kernels.RadialBasis(1)]
 ```
-3. Initialize inducing inputs
+* Initialize inducing inputs
 ```
 inducing_inputs = xtrain
 ```
-4. Create a new AutoGP object
+* Create a new GaussianProcess object
 ```
 model = autogp.GaussianProcess(likelihood, kernel, inducing_inputs)
 ```
-5. Select Optimizer and train the model
+5. Select optimizer and train the model
 ```
 optimizer = tf.train.RMSPropOptimizer(0.005)
 model.fit(data, optimizer, loo_steps=10, var_steps=20, epochs=30)
 ```
 Where we have selected to train a model using 10 Leave-One-Out optimization stept; 20 variational steps; and a total of 30 global iterations.
-6. Make predictions on unseen data
+* Make predictions on unseen data
 ```
 ypred, _ = model.predict(xtest)
 ```
