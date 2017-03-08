@@ -59,7 +59,7 @@ where the options given are:
 * --num_component: Number of mixture components in the approximate posterior 
 
 # Contact
-You can contact the authors of the  [AutoGP paper](https://arxiv.org/abs/1610.05392) in the given order, i.e. [Karl Krauth](https://github.com/Karl-Krauth); [Edwin Bonilla](https://github.com/ebonilla); [Maurizio Filippone](https://github.com/mauriziofilippone); and [Kurt Cutakar](http://www.eurecom.fr/en/people/cutajar-kurt). 
+You can contact the authors of the  [AutoGP paper](https://arxiv.org/abs/1610.05392) in the given order, i.e. [Karl Krauth](https://github.com/Karl-Krauth); [Edwin Bonilla](https://github.com/ebonilla); [Maurizio Filippone](https://github.com/mauriziofilippone); and [Kurt Cutajar](http://www.eurecom.fr/en/people/cutajar-kurt). 
 
 # Acknowledgements
 The code to support triangular matrices operations under `autogp/util/tf_ops` was taken from the GPflow repository (Hensman, Matthews et al. GPflow, http://github.com/GPflow/GPflow, 2016).
