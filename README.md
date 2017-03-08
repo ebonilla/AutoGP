@@ -41,11 +41,22 @@ ypred, _ = model.predict(xtest)
 ```
 
 # Experiments and Advanced Settings
-All the experiments in the current version of the  [AutoGP paper](https://arxiv.org/abs/1610.05392) can be reproduced using the scripts in the `experiments` directory. The script `experiments/rectangles.py` is a good example of using more advanced settings regarding the available flags. The description of these flags can be found under `autogp/util/util.py`. Here we focus on how to call the `rectangles.py` script with all the available flags:
+All the experiments in the current version of the  [AutoGP paper](https://arxiv.org/abs/1610.05392) can be reproduced using the scripts in the `experiments` directory. The script `experiments/rectangles.py` is a good example of using more advanced settings regarding the available flags. The description of these flags can be found under `autogp/util/util.py`. Here we describe  how to call the `rectangles.py` script with all the available flags:
 ```
-PYTHONPATH=. python  experiments/rectangles.py --batch_size=100 --learning_rate=0.0001 --n_epochs=100 ----display_step=10 --mc_train=10 
---n_inducing=100  --is_ard=1  --lengthscale=1  --var_steps=10 --loocv_steps=20 --num_components=1
+PYTHONPATH=. python  experiments/rectangles.py --batch_size=100 --learning_rate=0.0001 --var_steps=10 --loocv_steps=20 --n_epochs=100 --display_step=10 --mc_train=10 --n_inducing=100  --is_ard=1  --lengthscale=1   --num_components=1
 ```
+where the options given are:
+* --batch_size: Batch size
+* --learning_rate: Learning rate
+* --var_steps: Number of variational steps (for optimization of the ELBO objective)
+* --loocv_steps: Number of loo steps (for optimization of the LOO objective)
+* --n_epochs: Number of global iterations 
+* --display_step: Number of global iterations to display progress 
+* --mc_train: Number of MC samples for estimating gradients 
+* --n_inducing: Number of inducing inputs  
+* --is_ard: For Automated Relevance determination (different lengthscales for each dimension)
+* --lengthscale: Initial lengthscale for all latent processes
+* --num_component: Number of mixture components in the approximate posterior 
 
 
 # Acknowledgements
