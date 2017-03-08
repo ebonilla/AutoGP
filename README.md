@@ -21,7 +21,7 @@ likelihood = autogp.likelihoods.Gaussian()
 ```
 kernel = [autogp.kernels.RadialBasis(1)]
 ```
-* Initialize inducing inputs
+* Initialize inducing inputs, e.g. using the training data
 ```
 inducing_inputs = xtrain
 ```
@@ -34,7 +34,7 @@ model = autogp.GaussianProcess(likelihood, kernel, inducing_inputs)
 optimizer = tf.train.RMSPropOptimizer(0.005)
 model.fit(data, optimizer, loo_steps=10, var_steps=20, epochs=30)
 ```
-Where we have selected to train a model using 10 Leave-One-Out optimization stept; 20 variational steps; and a total of 30 global iterations.
+Where we have selected to train a model using 10 Leave-One-Out optimization steps; 20 variational steps; and a total of 30 global iterations.
 * Make predictions on unseen data
 ```
 ypred, _ = model.predict(xtest)
@@ -43,7 +43,7 @@ ypred, _ = model.predict(xtest)
 # Experiments and Advanced Settings
 All the experiments in the current version of the  [AutoGP paper](https://arxiv.org/abs/1610.05392) can be reproduced using the scripts in the `experiments` directory. The script `experiments/rectangles.py` is a good example of using more advanced settings regarding the available flags. The description of these flags can be found under `autogp/util/util.py`. Here we describe  how to call the `rectangles.py` script with all the available flags:
 ```
-PYTHONPATH=. python  experiments/rectangles.py --batch_size=100 --learning_rate=0.0001 --var_steps=10 --loocv_steps=20 --n_epochs=100 --display_step=10 --mc_train=10 --n_inducing=100  --is_ard=1  --lengthscale=1   --num_components=1
+PYTHONPATH=. python  experiments/rectangles.py --batch_size=500 --learning_rate=0.001 --var_steps=100 --loocv_steps=100 --n_epochs=1000 --display_step=10 --mc_train=1 --n_inducing=500  --is_ard=1  --lengthscale=10   --num_components=1
 ```
 where the options given are:
 * --batch_size: Batch size
