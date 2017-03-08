@@ -54,7 +54,7 @@ where the options given are:
 * --display_step: Number of global iterations to display progress 
 * --mc_train: Number of MC samples for estimating gradients 
 * --n_inducing: Number of inducing inputs  
-* --is_ard: For Automated Relevance determination (different lengthscales for each dimension)
+* --is_ard: For Automated Relevance Retermination (different lengthscales for each dimension)
 * --lengthscale: Initial lengthscale for all latent processes
 * --num_component: Number of mixture components in the approximate posterior 
 
