@@ -12,10 +12,12 @@ python setup.py
 ```
 # Usage 
 The script `example.py`shows a very simple example on how to use AutoGP with the default settings. The main components are:
-1. Create a Likelihood object
+
+1. Create a Likelihood object 
 ```
 likelihood = autogp.likelihoods.Gaussian()
 ```
+
 2. Create a Kernel object
 ```
 kernel = [autogp.kernels.RadialBasis(1)]
