@@ -67,7 +67,7 @@ where the options given are:
 * --learning_rate: Learning rate
 * --var_steps: Number of variational steps (for optimization of the ELBO objective)
 * --loocv_steps: Number of loo steps (for optimization of the LOO objective)
-* --n_epochs: Number of global iterations 
+* --n_epochs: Number of epoch
 * --display_step: Number of global iterations to display progress 
 * --mc_train: Number of MC samples for estimating gradients 
 * --n_inducing: Number of inducing inputs  
