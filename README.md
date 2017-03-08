@@ -44,6 +44,22 @@ ypred, _ = model.predict(xtest)
 All the experiments in the current version of the  [AutoGP paper](https://arxiv.org/abs/1610.05392) can be reproduced using the scripts in the `experiments` directory. The script `experiments/rectangles.py` is a good example of using more advanced settings regarding the available flags. The description of these flags can be found under `autogp/util/util.py`. Here we describe  how to call the `rectangles.py` script with all the available flags:
 ```
 PYTHONPATH=. python  experiments/rectangles.py --batch_size=500 --learning_rate=0.001 --var_steps=100 --loocv_steps=100 --n_epochs=1000 --display_step=10 --mc_train=1 --n_inducing=500  --is_ard=1  --lengthscale=10   --num_components=1
+PYTHONPATH=. python  experiments/rectangles.py --batch_size=1000 --learning_rate=0.003 --var_steps=50 --loocv_steps=0 --display_step=10 --mc_train=100 --n_inducing=10  --is_ard=1  --lengthscale=10   --num_components=1
+PYTHONPATH=. python  experiments/rectangles.py --batch_size=1000 --learning_rate=0.003 --var_steps=50 --loocv_steps=0 --display_step=10 --mc_train=100 --n_inducing=200  --is_ard=1  --lengthscale=10   --num_components=1
+PYTHONPATH=. python  experiments/rectangles.py --batch_size=1000 --learning_rate=0.003 --var_steps=50 --loocv_steps=0 --display_step=10 --mc_train=100 --n_inducing=1000  --is_ard=1  --lengthscale=10   --num_components=1
+PYTHONPATH=. python  experiments/rectangles.py --batch_size=1000 --learning_rate=0.003 --var_steps=50 --loocv_steps=0 --display_step=10 --mc_train=100 --n_inducing=10  --is_ard=1  --lengthscale=10   --num_components=1 --kernel=arccosine --kernel_depth=3 --kernel_degree=1
+PYTHONPATH=. python  experiments/rectangles.py --batch_size=1000 --learning_rate=0.003 --var_steps=50 --loocv_steps=0 --display_step=10 --mc_train=100 --n_inducing=200  --is_ard=1  --lengthscale=10   --num_components=1 --kernel=arccosine --kernel_depth=3 --kernel_degree=1
+PYTHONPATH=. python  experiments/rectangles.py --batch_size=1000 --learning_rate=0.003 --var_steps=50 --loocv_steps=0 --display_step=10 --mc_train=100 --n_inducing=1000  --is_ard=1  --lengthscale=10   --num_components=1 --kernel=arccosine --kernel_depth=3 --kernel_degree=1
+PYTHONPATH=. python  experiments/rectangles.py --batch_size=1000 --learning_rate=0.003 --var_steps=50 --loocv_steps=50 --display_step=10 --mc_train=100 --n_inducing=200  --is_ard=1  --lengthscale=10   --num_components=1
+PYTHONPATH=. python  experiments/mnist.py --batch_size=1000 --learning_rate=0.003 --display_step=10 --mc_train=100 --n_inducing=10 --is_ard=1
+PYTHONPATH=. python  experiments/mnist.py --batch_size=1000 --learning_rate=0.003 --display_step=10 --mc_train=100 --n_inducing=200 --is_ard=1
+PYTHONPATH=. python  experiments/mnist.py --batch_size=1000 --learning_rate=0.003 --display_step=10 --mc_train=100 --n_inducing=1000 --is_ard=1
+PYTHONPATH=. python  experiments/mnist8m.py --batch_size=1000 --learning_rate=0.003 --display_step=10 --mc_train=100 --n_inducing=200 --is_ard=1
+PYTHONPATH=. python  experiments/sarcos.py --batch_size=1000 --learning_rate=0.003 --display_step=10 --mc_train=10 --n_inducing=200 --is_ard=1
+PYTHONPATH=. python  experiments/sarcos.py --batch_size=1000 --learning_rate=0.003 --display_step=10 --mc_train=100 --n_inducing=200 --is_ard=1
+PYTHONPATH=. python  experiments/sarcos.py --batch_size=1000 --learning_rate=0.003 --display_step=10 --mc_train=1000 --n_inducing=200 --is_ard=1
+PYTHONPATH=. python  experiments/sarcos.py --batch_size=1000 --learning_rate=0.003 --display_step=10 --mc_train=10000 --n_inducing=200 --is_ard=1
+PYTHONPATH=. python  experiments/cifar10.py --batch_size=1000 --learning_rate=0.003 --n_epochs=10000 --display_step=10 --mc_train=100 --n_inducing=200 --is_ard=1
 ```
 where the options given are:
 * --batch_size: Batch size
