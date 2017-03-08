@@ -132,34 +132,27 @@ class GaussianProcess(object):
 
         start = data.next_batch(batch_size)
 
-        for epoch in xrange(epochs):
-            for i in xrange(var_steps):
+        old_epoch = 0
+        while data.epochs_completed < epochs:
+            num_epochs = data.epochs_completed + var_steps
+            while data.epochs_completed < num_epochs:
                 batch = data.next_batch(batch_size)
                 self.session.run(self.train_step, feed_dict={self.train_inputs: batch[0],
                                                              self.train_outputs: batch[1],
                                                              self.num_train: num_train})
-            for i in xrange(loo_steps):
+                if data.epochs_completed % display_step == 0 and data.epochs_completed != old_epoch:
+                    self._print_state(data, test, loss, num_train)
+                    old_epoch = data.epochs_completed
+
+            num_epochs = data.epochs_completed + loo_steps
+            while data.epochs_completed < num_epochs:
                 batch = data.next_batch(batch_size)
                 self.session.run(self.loo_train_step, feed_dict={self.train_inputs: batch[0],
-                                                             self.train_outputs: batch[1],
-                                                             self.num_train: num_train})
-
-
-            if epoch % display_step == 0:
-                nelbo = self.session.run(self.nelbo, feed_dict={self.train_inputs: data.X,
-                                                                self.train_outputs: data.Y,
-                                                                self.num_train: num_train})
-                loo = self.session.run(self.loo_loss, feed_dict={self.train_inputs: data.X,
-                                                                 self.train_outputs: data.Y,
+                                                                 self.train_outputs: batch[1],
                                                                  self.num_train: num_train})
-                print("i=" + repr(epoch) + " nelbo=" + repr(nelbo), end=" ")
-                print("loo=" + repr(loo))
-
-                if loss is not None:
-                    ypred = self.predict(test.X)[0]
-                    print("i=" + repr(epoch) + " curent " + loss.get_name() + "=" + "%.4f" % loss.eval(test.Y, ypred))
-
-
+                if data.epochs_completed % display_step == 0 and data.epochs_completed != old_epoch:
+                    self._print_state(data, test, loss, num_train)
+                    old_epoch = data.epochs_completed
 
     def predict(self, test_inputs, batch_size=None):
         """
@@ -193,6 +186,20 @@ class GaussianProcess(object):
                 self.predictions, feed_dict={self.test_inputs: test_inputs[i]})
 
         return np.concatenate(pred_means, axis=0), np.concatenate(pred_vars, axis=0)
+
+    def _print_state(self, data, test, loss, num_train):
+        nelbo = self.session.run(self.nelbo, feed_dict={self.train_inputs: data.X,
+                                                        self.train_outputs: data.Y,
+                                                        self.num_train: num_train})
+        loo = self.session.run(self.loo_loss, feed_dict={self.train_inputs: data.X,
+                                                         self.train_outputs: data.Y,
+                                                         self.num_train: num_train})
+        print("i=" + repr(data.epochs_completed) + " nelbo=" + repr(nelbo), end=" ")
+        print("loo=" + repr(loo))
+
+        if loss is not None:
+            ypred = self.predict(test.X)[0]
+            print("i=" + repr(data.epochs_completed) + " curent " + loss.get_name() + "=" + "%.4f" % loss.eval(test.Y, ypred))
 
     def _build_graph(self, raw_weights, raw_means, raw_covars, raw_inducing_inputs,
                      train_inputs, train_outputs, num_train, test_inputs):
