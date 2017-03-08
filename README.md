@@ -5,14 +5,13 @@ The code was tested on Python 2.7 and [TensorFlow 0.12](https://www.tensorflow.o
 
 # Installation
 You can download and install AutoGP using:
-
-To setup AutoGP run the following command:
 ```
 git clone git@github.com:ebonilla/AutoGP.git
 cd AutoGP
 python setup.py
 ```
-
+# Usage 
+There is a very simple example script showing how to use AutoGP in the `example.py`. 
 # Acknowledgements
 The code to support triangular matrices operations under `autogp/util/tf_ops` was taken from the GPflow repository (Hensman, Matthews et al. GPflow, http://github.com/GPflow/GPflow, 2016).
 
