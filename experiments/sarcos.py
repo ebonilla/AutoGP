@@ -86,7 +86,7 @@ if __name__ == '__main__':
     import time
     o = tf.train.RMSPropOptimizer(LEARNING_RATE)
     start = time.time()
-    m.fit(data, o, loo_steps=100, var_steps=100, epochs = EPOCHS, batch_size = BATCH_SIZE, display_step=DISPLAY_STEP, test = test,
+    m.fit(data, o, loo_steps=0, var_steps=50, epochs = EPOCHS, batch_size = BATCH_SIZE, display_step=DISPLAY_STEP, test = test,
             loss = error_rate )
     print time.time() - start
 

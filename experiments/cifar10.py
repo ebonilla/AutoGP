@@ -75,7 +75,6 @@ if __name__ == '__main__':
     error_rate = losses.ZeroOneLoss(data.Dout)
 
     o = tf.train.RMSPropOptimizer(LEARNING_RATE)
-    print "let' go!!!\n\n\n\n"
     m.fit(data, o, loo_steps=50, var_steps=50, epochs=EPOCHS, batch_size=BATCH_SIZE, display_step=DISPLAY_STEP, test=test,
           loss=error_rate)
     ypred = m.predict(test.X)[0]
