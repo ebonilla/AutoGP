@@ -10,4 +10,7 @@ experiments/data/rectangles_im_test.amat
 experiments/data/rectangles_im_train.amat
 experiments/data/sarcos_inv.mat
 experiments/data/sarcos_inv_test.mat
+experiments/data/convex.zip
+experiments/data/convex_train.amat
+experiments/data/50k/
 
