@@ -26,7 +26,7 @@ model = autogp.GaussianProcess(likelihood, kernel, inducing_inputs)
 
 # Train the model.
 optimizer = tf.train.RMSPropOptimizer(0.005)
-model.fit(data, optimizer, loo_steps=50, var_steps=50, epochs=1000)
+model.fit(data, optimizer, batch_size=1, loo_steps=10, var_steps=10, epochs=100)
 
 # Predict new inputs.
 ypred, _ = model.predict(xtest)
