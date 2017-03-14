@@ -53,6 +53,8 @@ KERNEL = FLAGS.kernel
 DEGREE = FLAGS.kernel_degree
 DEPTH  = FLAGS.kernel_depth
 
+print FLAGS.__flags
+
 # Read in and scale the data.
 train_data = pd.read_csv(TRAIN_PATH, sep=r"\s+", header=None)
 test_data = pd.read_csv(TEST_PATH, sep=r"\s+", header=None)
