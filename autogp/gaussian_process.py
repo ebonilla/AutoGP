@@ -133,7 +133,7 @@ class GaussianProcess(object):
         iter = 0
         while data.epochs_completed < epochs:
             var_iter = 0
-            while (var_iter < var_steps) and (data.epochs_completed < epochs):
+            while (var_iter < var_steps):
                 batch = data.next_batch(batch_size)
                 self.session.run(self.train_step, feed_dict={self.train_inputs: batch[0],
                                                              self.train_outputs: batch[1],
@@ -144,7 +144,7 @@ class GaussianProcess(object):
                 iter += 1
 
             loo_iter = 0
-            while (loo_iter < loo_steps) and (data.epochs_completed < epochs):
+            while (loo_iter < loo_steps):
                 batch = data.next_batch(batch_size)
                 self.session.run(self.loo_train_step, feed_dict={self.train_inputs: batch[0],
                                                                  self.train_outputs: batch[1],
