@@ -52,6 +52,7 @@ DEVICE_NAME = FLAGS.device_name
 KERNEL = FLAGS.kernel
 DEGREE = FLAGS.kernel_degree
 DEPTH  = FLAGS.kernel_depth
+HYPER_WITH_ELBO = FLAGS.hyper_with_elbo
 
 print FLAGS.__flags
 
@@ -78,8 +79,8 @@ print("Using Kernel " + KERNEL)
 m = autogp.GaussianProcess(likelihood, kern, Z, num_samples=NUM_SAMPLES, num_components=NUM_COMPONENTS)
 error_rate = losses.ZeroOneLoss(data.Dout)
 o = tf.train.AdamOptimizer(LEARNING_RATE)
-m.fit(data, o, loo_steps=LOOCV_STEPS, var_steps=VAR_STEPS, epochs=EPOCHS, batch_size=BATCH_SIZE, display_step=DISPLAY_STEP, test=test,
-          loss=error_rate)
+m.fit(data, o, loo_steps=LOOCV_STEPS, var_steps=VAR_STEPS, epochs=EPOCHS, batch_size=BATCH_SIZE, display_step=DISPLAY_STEP,
+      hyper_with_elbo=HYPER_WITH_ELBO, test=test, loss=error_rate)
 
 ypred = m.predict(test.X)[0]
 print("Final " + error_rate.get_name() + "=" + "%.4f" % error_rate.eval(test.Y, ypred))
