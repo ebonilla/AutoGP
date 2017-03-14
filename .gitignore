@@ -13,4 +13,5 @@ experiments/data/sarcos_inv_test.mat
 experiments/data/convex.zip
 experiments/data/convex_train.amat
 experiments/data/50k/
+results/
 
