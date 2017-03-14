@@ -130,8 +130,6 @@ class GaussianProcess(object):
             self.train_step = optimizer.minimize(self.nelbo)
             self.session.run(tf.global_variables_initializer())
 
-        start = data.next_batch(batch_size)
-
         old_epoch = 0
         while data.epochs_completed < epochs:
             num_epochs = data.epochs_completed + var_steps
