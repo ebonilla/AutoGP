@@ -31,6 +31,12 @@ def get_convex_data():
     os.chdir("../../")
     print "done"
 
+def normalize_features(xtrain, xtest):
+    mean = np.mean(xtrain, axis=0)
+    std = np.std(xtrain, axis=0)
+    xtrain = (xtrain-mean)/std
+    xtest = (xtest-mean)/std
+    return xtrain, xtest
 
 # Gettign the data
 if os.path.exists(TRAIN_PATH) is False:  # directory does not exist, download the data
@@ -63,6 +69,11 @@ train_X = train_data.values[:, :-1]
 train_Y = train_data.values[:, -1:]
 test_X = test_data.values[:, :-1]
 test_Y = test_data.values[:, -1:]
+
+# feature normalization if requested
+if (FLAGS.normalize_features is True):
+    train_X, test_X = normalize_features(train_X, test_X)
+
 data = datasets.DataSet(train_X, train_Y)
 test = datasets.DataSet(test_X, test_Y)
 
@@ -74,7 +85,6 @@ if KERNEL == 'arccosine':
 else:
     kern = [kernels.RadialBasis(data.X.shape[1], lengthscale=LENGTHSCALE, input_scaling=IS_ARD) for i in xrange(1)]
 
-print("Using Kernel " + KERNEL)
 
 m = autogp.GaussianProcess(likelihood, kern, Z, num_samples=NUM_SAMPLES, num_components=NUM_COMPONENTS)
 error_rate = losses.ZeroOneLoss(data.Dout)

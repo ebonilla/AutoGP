@@ -71,5 +71,7 @@ def get_flags():
     flags.DEFINE_integer('kernel_degree', 0, 'Degree of arccosine kernel')
     flags.DEFINE_integer('kernel_depth', 1, 'Depth of arcosine kernel')
     flags.DEFINE_boolean('hyper_with_elbo', True, 'Optimize hyperparameters with elbo as well')
+    flags.DEFINE_boolean('normalize_features', False, 'Normalizes features')
+
     return FLAGS
 
