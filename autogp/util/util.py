@@ -73,6 +73,6 @@ def get_flags():
     flags.DEFINE_boolean('hyper_with_elbo', True, 'Optimize hyperparameters with elbo as well')
     flags.DEFINE_boolean('normalize_features', False, 'Normalizes features')
     flags.DEFINE_boolean('optimize_inducing', True, 'Optimize inducing inputs')
-
+    flags.DEFINE_float('latent_noise', 0.001, 'latent noise for Kernel matrices')
     return FLAGS
 

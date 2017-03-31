@@ -60,6 +60,7 @@ DEGREE = FLAGS.kernel_degree
 DEPTH  = FLAGS.kernel_depth
 HYPER_WITH_ELBO = FLAGS.hyper_with_elbo
 OPTIMIZE_INDUCING = FLAGS.optimize_inducing
+LATENT_NOISE = FLAGS.latent_noise
 
 print FLAGS.__flags
 
@@ -82,9 +83,11 @@ Z = init_z(data.X, NUM_INDUCING)
 likelihood = likelihoods.Logistic()  # Setup initial values for the model.
 
 if KERNEL == 'arccosine':
-    kern = [kernels.ArcCosine(data.X.shape[1], degree=DEGREE, depth=DEPTH, lengthscale=LENGTHSCALE, std_dev=1.0, input_scaling=IS_ARD) for i in xrange(1)]
+    kern = [kernels.ArcCosine(data.X.shape[1], degree=DEGREE, depth=DEPTH, lengthscale=LENGTHSCALE, std_dev=1.0,
+                              input_scaling=IS_ARD, white=LATENT_NOISE) for i in xrange(1)]
 else:
-    kern = [kernels.RadialBasis(data.X.shape[1], lengthscale=LENGTHSCALE, input_scaling=IS_ARD) for i in xrange(1)]
+    kern = [kernels.RadialBasis(data.X.shape[1], lengthscale=LENGTHSCALE, input_scaling=IS_ARD,
+                                white=LATENT_NOISE) for i in xrange(1)]
 
 
 m = autogp.GaussianProcess(likelihood, kern, Z, num_samples=NUM_SAMPLES, num_components=NUM_COMPONENTS)
