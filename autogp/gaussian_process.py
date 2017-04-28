@@ -220,7 +220,7 @@ class GaussianProcess(object):
                 diag_mat = tf.matrix_diag(tf.matrix_diag_part(mat))
                 exp_diag_mat = tf.matrix_diag(tf.exp(tf.matrix_diag_part(mat)))
                 covars_list[i] = mat - diag_mat + exp_diag_mat
-            covars = tf.pack(covars_list, 0)
+            covars = tf.stack(covars_list, 0)
         # Both inducing inputs and the posterior means can vary freely so don't change them.
         means = raw_means
         inducing_inputs = raw_inducing_inputs
@@ -228,7 +228,7 @@ class GaussianProcess(object):
         # Build the matrices of covariances between inducing inputs.
         kernel_mat = [self.kernels[i].kernel(inducing_inputs[i, :, :])
                       for i in xrange(self.num_latent)]
-        kernel_chol = tf.pack([tf.cholesky(k) for k in kernel_mat], 0)
+        kernel_chol = tf.stack([tf.cholesky(k) for k in kernel_mat], 0)
 
         # Now build the objective function.
         entropy = self._build_entropy(weights, means, covars)
@@ -271,8 +271,8 @@ class GaussianProcess(object):
                                                                 means[i, :, :], covar_input)
             pred_means[i], pred_vars[i] = self.likelihood.predict(sample_means, sample_vars)
 
-        pred_means = tf.pack(pred_means, 0)
-        pred_vars = tf.pack(pred_vars, 0)
+        pred_means = tf.stack(pred_means, 0)
+        pred_vars = tf.stack(pred_vars, 0)
 
         # Compute the mean and variance of the gaussian mixture from their components.
         weights = tf.expand_dims(tf.expand_dims(weights, 1), 1)
@@ -311,7 +311,7 @@ class GaussianProcess(object):
                 else:
                     weighted_log_probs[j] = tf.log(weights[j]) + log_normal_probs[j][i]
 
-            entropy -= weights[i] * util.logsumexp(tf.pack(weighted_log_probs))
+            entropy -= weights[i] * util.logsumexp(tf.stack(weighted_log_probs))
 
         return entropy
 
@@ -361,8 +361,8 @@ class GaussianProcess(object):
             kern_sums[i] = (self.kernels[i].diag_kernel(train_inputs) -
                             util.diag_mul(kern_prods[i], ind_train_kern))
 
-        kern_prods = tf.pack(kern_prods, 0)
-        kern_sums = tf.pack(kern_sums, 0)
+        kern_prods = tf.stack(kern_prods, 0)
+        kern_sums = tf.stack(kern_sums, 0)
         return kern_prods, kern_sums
 
     def _build_samples(self, kern_prods, kern_sums, means, covars):
@@ -385,7 +385,7 @@ class GaussianProcess(object):
             sample_means[i] = tf.matmul(kern_prods[i, :, :], tf.expand_dims(means[i, :], 1))
             sample_vars[i] = tf.expand_dims(kern_sums[i, :] + quad_form, 1)
 
-        sample_means = tf.concat(1, sample_means)
-        sample_vars = tf.concat(1, sample_vars)
+        sample_means = tf.concat( sample_means,1)
+        sample_vars = tf.concat(sample_vars,1)
         return sample_means, sample_vars
 

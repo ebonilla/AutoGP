@@ -24,7 +24,7 @@ from tensorflow.python.framework import ops
 
 
 def eye(N):
-    return tf.diag(tf.ones(tf.pack([N, ]), dtype='float32'))
+    return tf.diag(tf.ones(tf.stack([N, ]), dtype='float32'))
 
 
 def tri_vec_shape(N):
@@ -42,7 +42,7 @@ def _vec_to_tri_grad(op, grad):
     return [tri_to_vec(grad)]
 
 
-@tf.RegisterShape("VecToTri")
+@ops.RegisterShape("VecToTri")
 def _vec_to_tri_shape(op):
     in_shape = op.inputs[0].get_shape().with_rank(2)
     M = in_shape[1].value
