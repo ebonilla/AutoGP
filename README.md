@@ -1,7 +1,7 @@
 # AutoGP: Automated Variational Inference for Gaussian Process Models
-An implementation of the model described in [AutoGP: Exploring the Capabilities and Limitations of Gaussian Process Models](https://arxiv.org/abs/1610.05392). 
+An implementation of the model described in [AutoGP: Exploring the Capabilities and Limitations of Gaussian Process Models](https://arxiv.org/abs/1610.05392).
 
-The code was tested on Python 2.7 and [TensorFlow 0.12](https://www.tensorflow.org/get_started/os_setup).
+The code was tested on Python 2.7 and [TensorFlow 0.12-1.2](https://www.tensorflow.org/get_started/os_setup).
 
 # Authors
 The original code was mainly developed by
@@ -17,10 +17,10 @@ git clone git@github.com:ebonilla/AutoGP.git
 cd AutoGP
 python setup.py
 ```
-# Usage 
+# Usage
 The script `example.py`shows a very simple example of how to use AutoGP with the default settings. The main components are:
 
-* Create a Likelihood object 
+* Create a Likelihood object
 ```
 likelihood = autogp.likelihoods.Gaussian()
 ```
@@ -75,16 +75,15 @@ where the options given are:
 * --var_steps: Number of variational steps (for optimization of the ELBO objective)
 * --loocv_steps: Number of loo steps (for optimization of the LOO objective)
 * --n_epochs: Number of epochs
-* --display_step: Number of global iterations to display progress 
-* --mc_train: Number of MC samples for estimating gradients 
+* --display_step: Number of global iterations to display progress
+* --mc_train: Number of MC samples for estimating gradients
 * --n_inducing: Number of inducing inputs  
 * --is_ard: For Automated Relevance Retermination (different lengthscales for each dimension)
 * --lengthscale: Initial lengthscale for all latent processes
-* --num_component: Number of mixture components in the approximate posterior 
+* --num_component: Number of mixture components in the approximate posterior
 
 # Contact
-You can contact the authors of the  [AutoGP paper](https://arxiv.org/abs/1610.05392) in the given order, i.e. [Karl Krauth](https://github.com/Karl-Krauth); [Edwin Bonilla](https://github.com/ebonilla); [Maurizio Filippone](https://github.com/mauriziofilippone); and [Kurt Cutajar](http://www.eurecom.fr/en/people/cutajar-kurt). 
+You can contact the authors of the  [AutoGP paper](https://arxiv.org/abs/1610.05392) in the given order, i.e. [Karl Krauth](https://github.com/Karl-Krauth); [Edwin Bonilla](https://github.com/ebonilla); [Maurizio Filippone](https://github.com/mauriziofilippone); and [Kurt Cutajar](http://www.eurecom.fr/en/people/cutajar-kurt).
 
 # Acknowledgements
 The code to support triangular matrices operations under `autogp/util/tf_ops` was taken from the GPflow repository (Hensman, Matthews et al. GPflow, http://github.com/GPflow/GPflow, 2016).
-
