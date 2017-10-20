@@ -1,11 +1,12 @@
 from __future__ import print_function
+from __future__ import absolute_import
 
 import numpy as np
 import tensorflow as tf
 
-import kernels
-import likelihoods
-import util
+from . import kernels
+from . import likelihoods
+from . import util
 
 
 class GaussianProcess(object):

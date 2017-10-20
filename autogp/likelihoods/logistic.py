@@ -1,8 +1,9 @@
+from __future__ import absolute_import
 import numpy as np
 import tensorflow as tf
 
 from autogp import util
-import likelihood
+from . import likelihood
 
 
 class Logistic(likelihood.Likelihood):

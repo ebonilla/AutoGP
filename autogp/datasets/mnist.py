@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 import numpy as np
 import tensorflow as tf
 
@@ -5,7 +6,7 @@ from tensorflow.contrib.learn.python.learn.datasets import base
 from tensorflow.contrib.learn.python.learn.datasets.mnist import extract_images, extract_labels
 from tensorflow.python.framework import dtypes
 
-from dataset import DataSet
+from .dataset import DataSet
 
 def process_mnist(images, dtype = dtypes.float32, reshape=True):
     if reshape:
