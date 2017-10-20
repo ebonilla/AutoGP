@@ -51,6 +51,10 @@ matpackops = Extension(
 
 ext_modules = [matpackops]
 
+REQUIRED = [
+    'scikit-learn>=0.17.0',
+    'tensorflow>=1.1.0',
+]
 
 # class custom_build_ext(build_ext):
 #     def build_extensions(self):
@@ -68,6 +72,7 @@ setup(
     license='Apache',
     packages=find_packages('autogp'),
     ext_modules=ext_modules,
+    install_requires=REQUIRED,
     cmdclass={
         # 'build_ext': custom_build_ext
     },
