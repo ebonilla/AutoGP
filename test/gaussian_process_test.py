@@ -253,7 +253,7 @@ class TestMultiFull(TestGaussianProcess):
         super(TestMultiFull, cls).setUpClass()
         likelihood = likelihoods.Softmax()
         kernel = [kernels.RadialBasis(input_dim=2, lengthscale=1.0, std_dev=1.0, white=0.0)
-                  for i in xrange(2)]
+                  for i in range(2)]
         inducing_locations = np.array([[1.0, 2.0, 3.0, 4.0]])
         cls.model = autogp.GaussianProcess(likelihood_func=likelihood,
                                            kernel_funcs=kernel,

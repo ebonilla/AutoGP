@@ -34,7 +34,7 @@ def load_cifar():
     import cPickle
     train_X = np.empty([0, 3072], dtype=np.float32)
     train_Y = np.empty([0, 10], dtype=np.float32)
-    for i in xrange(1, 6):
+    for i in range(1, 6):
         f = open(DATA_DIR + "data_batch_" + str(i))
         d = cPickle.load(f)
         f.close()
@@ -65,8 +65,8 @@ if __name__ == '__main__':
 
     # Setup initial values for the model.
     likelihood = likelihoods.Softmax()
-    kern = [kernels.RadialBasis(data.X.shape[1], lengthscale=10.0, input_scaling = IS_ARD) for i in xrange(10)]
-    # kern = [kernels.ArcCosine(X.shape[1], 2, 3, 5.0, 1.0, input_scaling=True) for i in xrange(10)] #RadialBasis(X.shape[1], input_scaling=True) for i in xrange(10)]
+    kern = [kernels.RadialBasis(data.X.shape[1], lengthscale=10.0, input_scaling = IS_ARD) for i in range(10)]
+    # kern = [kernels.ArcCosine(X.shape[1], 2, 3, 5.0, 1.0, input_scaling=True) for i in range(10)] #RadialBasis(X.shape[1], input_scaling=True) for i in range(10)]
 
     Z = init_z(data.X, NUM_INDUCING)
     m = autogp.GaussianProcess(likelihood, kern, Z, num_samples=NUM_SAMPLES)
