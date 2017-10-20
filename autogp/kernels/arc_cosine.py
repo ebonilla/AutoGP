@@ -25,7 +25,9 @@ class ArcCosine(kernel.Kernel):
         else:
             white_noise = 0.0
 
-        kern = self.recursive_kernel(points1 / self.lengthscale, points2 / self.lengthscale, self.depth)
+        kern = self.recursive_kernel(
+            points1 / self.lengthscale,
+            points2 / self.lengthscale, self.depth)
         return (self.std_dev ** 2) * kern + white_noise
 
     def recursive_kernel(self, points1, points2, depth):

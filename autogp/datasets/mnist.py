@@ -9,7 +9,7 @@ from tensorflow.python.framework import dtypes
 from .dataset import DataSet
 
 
-def process_mnist(images, dtype = dtypes.float32, reshape=True):
+def process_mnist(images, dtype=dtypes.float32, reshape=True):
     if reshape:
         assert images.shape[3] == 1
         images = images.reshape(images.shape[0],
@@ -37,9 +37,9 @@ def standardize_data(images, means, stds):
     rows, cols = data.shape
     for col in range(cols):
         if stds[col] == 0:
-            data[:, col] = (data[:,col] - means[col])
+            data[:, col] = (data[:, col] - means[col])
         else:
-            data[:, col] = (data[:,col] - means[col]) / stds[col]
+            data[:, col] = (data[:, col] - means[col]) / stds[col]
     return data
 
 

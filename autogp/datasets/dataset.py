@@ -8,7 +8,7 @@ class DataSet():
         perm = np.arange(self._num_examples)
         if (shuffle):
             np.random.shuffle(perm)
-        self._X = X[perm ,:]
+        self._X = X[perm, :]
         self._Y = Y[perm, :]
         self._epochs_completed = 0
         self._index_in_epoch = 0
