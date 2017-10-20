@@ -8,8 +8,7 @@ class NegLogLikelihood(loss.Loss):
         loss.Loss.__init__(self, dout)
 
     def eval(self, ytrue, ypred):
-        self.like.log_cond_prob(ytrue, ypred)
-        return error_rate
+        return self.like.log_cond_prob(ytrue, ypred)
 
     def get_name(self):
         return "Negative Log Likelihood"
