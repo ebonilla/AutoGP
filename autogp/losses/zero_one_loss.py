@@ -2,6 +2,7 @@ from __future__ import absolute_import
 import numpy as np
 from . import loss
 
+
 class ZeroOneLoss(loss.Loss):
     def __init__(self, dout):
         loss.Loss.__init__(self,dout)

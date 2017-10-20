@@ -34,18 +34,30 @@ class ArcCosine(kernel.Kernel):
             mag_sqr2 = tf.expand_dims(tf.reduce_sum(points2 ** 2, 1), 1)
             point_prod = tf.matmul(points1, tf.transpose(points2))
         else:
-            mag_sqr1 = tf.expand_dims(self.diag_recursive_kernel(points1, depth - 1), 1)
-            mag_sqr2 = tf.expand_dims(self.diag_recursive_kernel(points2, depth - 1), 1)
+            mag_sqr1 = tf.expand_dims(
+                self.diag_recursive_kernel(points1, depth - 1),
+                1)
+            mag_sqr2 = tf.expand_dims(
+                self.diag_recursive_kernel(points2, depth - 1),
+                1)
             point_prod = self.recursive_kernel(points1, points2, depth - 1)
 
         mag_prod = tf.sqrt(mag_sqr1) * tf.transpose(tf.sqrt(mag_sqr2))
-        cos_angles = (2 * point_prod) / (tf.sqrt(1 + 2 * mag_sqr1) * tf.transpose(tf.sqrt(1 + 2 * mag_sqr2)))
+        cos_angles = (2 * point_prod) / (
+            tf.sqrt(1 + 2 * mag_sqr1) * tf.transpose(
+                tf.sqrt(1 + 2 * mag_sqr2)
+            )
+        )
 
-        return (((mag_prod ** self.degree) / np.pi) *
-                                      self.angular_func(cos_angles))
+        return (
+            ((mag_prod ** self.degree) / np.pi) *
+            self.angular_func(cos_angles)
+        )
 
     def diag_kernel(self, points):
-        return (self.std_dev ** 2) * self.diag_recursive_kernel(points / self.lengthscale, self.depth) + self.white
+        return (self.std_dev ** 2) * self.diag_recursive_kernel(
+            points / self.lengthscale, self.depth
+        ) + self.white
 
     # TODO(karl): Add a memoize decorator.
     # @util.memoize
@@ -56,7 +68,10 @@ class ArcCosine(kernel.Kernel):
         else:
             mag_sqr = self.diag_recursive_kernel(points, depth - 1)
 
-        return ((mag_sqr ** self.degree) * self.angular_func(2 * mag_sqr / (1 + 2 * mag_sqr)) / np.pi)
+        return (
+            (mag_sqr ** self.degree) * self.angular_func(
+                2 * mag_sqr / (1 + 2 * mag_sqr)
+            ) / np.pi)
 
     def angular_func(self, cos_angles):
         angles = tf.acos(cos_angles)
@@ -67,10 +82,11 @@ class ArcCosine(kernel.Kernel):
         elif self.degree == 1:
             return sin_angles + pi_diff * cos_angles
         elif self.degree == 2:
-            return 3 * sin_angles * cos_angles + pi_diff * (1 + 2 * cos_angles ** 2)
+            return 3 * sin_angles * cos_angles + pi_diff * (
+                1 + 2 * cos_angles ** 2
+            )
         else:
             assert False
 
     def get_params(self):
         return [self.std_dev, self.lengthscale]
-

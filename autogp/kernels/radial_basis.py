@@ -1,5 +1,4 @@
 from __future__ import absolute_import
-import numpy as np
 import tensorflow as tf
 
 from autogp import util
@@ -31,16 +30,20 @@ class RadialBasis(kernel.Kernel):
         points2 = points2 / self.lengthscale
         magnitude_square1 = tf.expand_dims(tf.reduce_sum(points1 ** 2, 1), 1)
         magnitude_square2 = tf.expand_dims(tf.reduce_sum(points2 ** 2, 1), 1)
-        distances = (magnitude_square1 - 2 * tf.matmul(points1, tf.transpose(points2)) +
-                     tf.transpose(magnitude_square2))
-        distances = tf.clip_by_value(distances, 0.0, self.MAX_DIST);
+        distances = (
+            magnitude_square1 - 2 * tf.matmul(
+                points1,
+                tf.transpose(points2)
+            ) + tf.transpose(magnitude_square2))
+        distances = tf.clip_by_value(distances, 0.0, self.MAX_DIST)
 
         kern = ((self.std_dev ** 2) * tf.exp(-distances / 2.0))
         return kern + white_noise
 
     def diag_kernel(self, points):
-        return ((self.std_dev ** 2) + self.white) * tf.ones([tf.shape(points)[0]])
+        return (
+            (self.std_dev ** 2) + self.white
+        ) * tf.ones([tf.shape(points)[0]])
 
     def get_params(self):
         return [self.lengthscale, self.std_dev]
-

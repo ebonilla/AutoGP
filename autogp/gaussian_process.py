@@ -4,8 +4,6 @@ from __future__ import absolute_import
 import numpy as np
 import tensorflow as tf
 
-from . import kernels
-from . import likelihoods
 from . import util
 
 
@@ -20,13 +18,16 @@ class GaussianProcess(object):
     kernel_funcs : list of subclasses of kernels.Kernel
         A list of one kernel per latent function.
     inducing_inputs : ndarray
-        An array of initial inducing input locations. Dimensions: num_inducing * input_dim.
+        An array of initial inducing input locations
+        Dimensions: num_inducing * input_dim.
     num_components : int
         The number of mixture of Gaussian components.
     diag_post : bool
-        True if the mixture of Gaussians uses a diagonal covariance, False otherwise.
+        True if the mixture of Gaussians uses a diagonal covariance,
+        False otherwise.
     num_samples : int
-        The number of samples to approximate the expected log likelihood of the posterior.
+        The number of samples to approximate the expected log likelihood
+        of the posterior.
     """
     def __init__(self,
                  likelihood_func,
@@ -42,10 +43,14 @@ class GaussianProcess(object):
         # Save whether our posterior is diagonal or not.
         self.diag_post = diag_post
 
-        # Repeat the inducing inputs for all latent processes if we haven't been given individually
+        # Repeat the inducing inputs for all latent processes
+        # if we haven't been given individually
         # specified inputs per process.
         if inducing_inputs.ndim == 2:
-            inducing_inputs = np.tile(inducing_inputs[np.newaxis, :, :], [len(self.kernels), 1, 1])
+            inducing_inputs = np.tile(
+                inducing_inputs[np.newaxis, :, :],
+                [len(self.kernels), 1, 1]
+            )
 
         # Initialize all model dimension constants.
         self.num_components = num_components
@@ -54,42 +59,59 @@ class GaussianProcess(object):
         self.num_inducing = inducing_inputs.shape[1]
         self.input_dim = inducing_inputs.shape[2]
 
-        # Define all parameters that get optimized directly in raw form. Some parameters get
+        # Define all parameters that get optimized directly in raw form.
+        # Some parameters get
         # transformed internally to maintain certain pre-conditions.
         self.raw_weights = tf.Variable(tf.zeros([self.num_components]))
-        self.raw_means = tf.Variable(tf.zeros([self.num_components, self.num_latent,
-                                               self.num_inducing]))
+        self.raw_means = tf.Variable(tf.zeros([
+            self.num_components,
+            self.num_latent,
+            self.num_inducing]))
         if self.diag_post:
-            self.raw_covars = tf.Variable(tf.ones([self.num_components, self.num_latent,
-                                                   self.num_inducing]))
+            self.raw_covars = tf.Variable(tf.ones([
+                self.num_components,
+                self.num_latent,
+                self.num_inducing]))
         else:
-            init_vec = np.zeros([self.num_components, self.num_latent] +
-                                 util.tri_vec_shape(self.num_inducing), dtype=np.float32) 
+            init_vec = np.zeros([
+                self.num_components, self.num_latent] +
+                util.tri_vec_shape(self.num_inducing),
+                dtype=np.float32)
             self.raw_covars = tf.Variable(init_vec)
-        self.raw_inducing_inputs = tf.Variable(inducing_inputs, dtype=tf.float32)
+        self.raw_inducing_inputs = tf.Variable(
+            inducing_inputs, dtype=tf.float32)
         self.raw_likelihood_params = self.likelihood.get_params()
-        self.raw_kernel_params = sum([k.get_params() for k in self.kernels], [])
+        self.raw_kernel_params = sum([
+            k.get_params() for k in self.kernels], []
+        )
 
         # Define placeholder variables for training and predicting.
         self.num_train = tf.placeholder(tf.float32, shape=[], name="num_train")
-        self.train_inputs = tf.placeholder(tf.float32, shape=[None, self.input_dim],
-                                           name="train_inputs")
-        self.train_outputs = tf.placeholder(tf.float32, shape=[None, None],
-                                            name="train_outputs")
-        self.test_inputs = tf.placeholder(tf.float32, shape=[None, self.input_dim],
-                                          name="test_inputs")
+        self.train_inputs = tf.placeholder(
+            tf.float32,
+            shape=[None, self.input_dim],
+            name="train_inputs")
+        self.train_outputs = tf.placeholder(
+            tf.float32, shape=[None, None],
+            name="train_outputs")
+        self.test_inputs = tf.placeholder(
+            tf.float32,
+            shape=[None, self.input_dim],
+            name="test_inputs")
 
         # Now build our computational graph.
-        self.nelbo, self.loo_loss, self.predictions = self._build_graph(self.raw_weights,
-                                                                        self.raw_means,
-                                                                        self.raw_covars,
-                                                                        self.raw_inducing_inputs,
-                                                                        self.train_inputs,
-                                                                        self.train_outputs,
-                                                                        self.num_train,
-                                                                        self.test_inputs)
+        self.nelbo, self.loo_loss, self.predictions = self._build_graph(
+            self.raw_weights,
+            self.raw_means,
+            self.raw_covars,
+            self.raw_inducing_inputs,
+            self.train_inputs,
+            self.train_outputs,
+            self.num_train,
+            self.test_inputs)
 
-        #config = tf.ConfigProto(log_device_placement=True, allow_soft_placement=True)
+        #config = tf.ConfigProto(
+        # log_device_placement=True, allow_soft_placement=True)
         # Do all the tensorflow bookkeeping.
         self.session = tf.Session()
         self.optimizer = None
@@ -109,11 +131,13 @@ class GaussianProcess(object):
         loo_steps : int
             Number of steps  to update hyper-parameters using loo objective
         var_steps : int
-            Number of steps to update  variational parameters using variational objective (elbo).
+            Number of steps to update  variational parameters using variational
+            objective (elbo).
         epochs : int
             The number of epochs to optimize the model for.
         batch_size : int
-            The number of datapoints to use per mini-batch when training. If batch_size is None,
+            The number of datapoints to use per mini-batch when training.
+            If batch_size is None,
             then we perform batch gradient descent.
         display_step : int
             The frequency at which the objective values are printed out.
@@ -125,9 +149,12 @@ class GaussianProcess(object):
         if self.optimizer != optimizer:
             self.optimizer = optimizer
             self.loo_train_step = optimizer.minimize(
-               self.loo_loss, var_list=[self.raw_inducing_inputs] +
-                                       self.raw_kernel_params +
-                                       self.raw_likelihood_params)
+                self.loo_loss, var_list=[
+                    self.raw_inducing_inputs
+                ] +
+                self.raw_kernel_params +
+                self.raw_likelihood_params
+            )
             self.train_step = optimizer.minimize(self.nelbo)
             self.session.run(tf.global_variables_initializer())
 
@@ -138,20 +165,27 @@ class GaussianProcess(object):
             num_epochs = data.epochs_completed + var_steps
             while data.epochs_completed < num_epochs:
                 batch = data.next_batch(batch_size)
-                self.session.run(self.train_step, feed_dict={self.train_inputs: batch[0],
-                                                             self.train_outputs: batch[1],
-                                                             self.num_train: num_train})
-                if data.epochs_completed % display_step == 0 and data.epochs_completed != old_epoch:
+                self.session.run(
+                    self.train_step,
+                    feed_dict={
+                        self.train_inputs: batch[0],
+                        self.train_outputs: batch[1],
+                        self.num_train: num_train})
+                if (data.epochs_completed % display_step == 0
+                        and data.epochs_completed != old_epoch):
                     self._print_state(data, test, loss, num_train)
                     old_epoch = data.epochs_completed
 
             num_epochs = data.epochs_completed + loo_steps
             while data.epochs_completed < num_epochs:
                 batch = data.next_batch(batch_size)
-                self.session.run(self.loo_train_step, feed_dict={self.train_inputs: batch[0],
-                                                                 self.train_outputs: batch[1],
-                                                                 self.num_train: num_train})
-                if data.epochs_completed % display_step == 0 and data.epochs_completed != old_epoch:
+                self.session.run(self.loo_train_step, feed_dict={
+                    self.train_inputs: batch[0],
+                    self.train_outputs: batch[1],
+                    self.num_train: num_train})
+                if (
+                        data.epochs_completed % display_step == 0 and
+                        data.epochs_completed != old_epoch):
                     self._print_state(data, test, loss, num_train)
                     old_epoch = data.epochs_completed
 
@@ -162,17 +196,21 @@ class GaussianProcess(object):
         Parameters
         ----------
         test_inputs : ndarray
-            Points on which we wish to make predictions. Dimensions: num_test * input_dim.
+            Points on which we wish to make predictions.
+            Dimensions: num_test * input_dim.
         batch_size : int
-            The size of the batches we make predictions on. If batch_size is None, predict on the
+            The size of the batches we make predictions on.
+            If batch_size is None, predict on the
             entire test set at once.
 
         Returns
         -------
         ndarray
-            The predicted mean of the test inputs. Dimensions: num_test * output_dim.
+            The predicted mean of the test inputs.
+            Dimensions: num_test * output_dim.
         ndarray
-            The predicted variance of the test inputs. Dimensions: num_test * output_dim.
+            The predicted variance of the test inputs.
+            Dimensions: num_test * output_dim.
         """
         if batch_size is None:
             num_batches = 1
@@ -190,31 +228,49 @@ class GaussianProcess(object):
 
     def _print_state(self, data, test, loss, num_train):
         if num_train <= 100000:
-            nelbo = self.session.run(self.nelbo, feed_dict={self.train_inputs: data.X,
-                                                            self.train_outputs: data.Y,
-                                                            self.num_train: num_train})
-            loo = self.session.run(self.loo_loss, feed_dict={self.train_inputs: data.X,
-                                                             self.train_outputs: data.Y,
-                                                             self.num_train: num_train})
-            print("i=" + repr(data.epochs_completed) + " nelbo=" + repr(nelbo), end=" ")
+            nelbo = self.session.run(self.nelbo, feed_dict={
+                self.train_inputs: data.X,
+                self.train_outputs: data.Y,
+                self.num_train: num_train})
+            loo = self.session.run(self.loo_loss, feed_dict={
+                self.train_inputs: data.X,
+                self.train_outputs: data.Y,
+                self.num_train: num_train})
+            print(
+                "i=" + repr(data.epochs_completed) +
+                " nelbo=" + repr(nelbo), end=" ")
             print("loo=" + repr(loo))
 
         if loss is not None:
             ypred = self.predict(test.X)[0]
-            print("i=" + repr(data.epochs_completed) + " curent " + loss.get_name() + "=" + "%.4f" % loss.eval(test.Y, ypred))
+            print(
+                "i=" + repr(data.epochs_completed) +
+                " curent " + loss.get_name() + "=" + "%.4f"
+                % loss.eval(test.Y, ypred))
 
-    def _build_graph(self, raw_weights, raw_means, raw_covars, raw_inducing_inputs,
-                     train_inputs, train_outputs, num_train, test_inputs):
+    def _build_graph(
+            self,
+            raw_weights,
+            raw_means,
+            raw_covars,
+            raw_inducing_inputs,
+            train_inputs,
+            train_outputs,
+            num_train,
+            test_inputs):
         # First transform all raw variables into their internal form.
         # Use softmax(raw_weights) to keep all weights normalized.
         weights = tf.exp(raw_weights) / tf.reduce_sum(tf.exp(raw_weights))
 
         if self.diag_post:
-            # Use exp(raw_covars) so as to guarantee the diagonal matrix remains positive definite.
+            # Use exp(raw_covars) so as to guarantee the diagonal matrix
+            # remains positive definite.
             covars = tf.exp(raw_covars)
         else:
-            # Use vec_to_tri(raw_covars) so as to only optimize over the lower triangular portion.
-            # We note that we will always operate over the cholesky space internally.
+            # Use vec_to_tri(raw_covars) so as to only optimize
+            # over the lower triangular portion.
+            # We note that we will always operate
+            # over the cholesky space internally.
             covars_list = [None] * self.num_components
             for i in xrange(self.num_components):
                 mat = util.vec_to_tri(raw_covars[i, :, :])
@@ -227,8 +283,9 @@ class GaussianProcess(object):
         inducing_inputs = raw_inducing_inputs
 
         # Build the matrices of covariances between inducing inputs.
-        kernel_mat = [self.kernels[i].kernel(inducing_inputs[i, :, :])
-                      for i in xrange(self.num_latent)]
+        kernel_mat = [
+            self.kernels[i].kernel(inducing_inputs[i, :, :])
+            for i in xrange(self.num_latent)]
         kernel_chol = tf.stack([tf.cholesky(k) for k in kernel_mat], 0)
 
         # Now build the objective function.
@@ -240,25 +297,39 @@ class GaussianProcess(object):
         nelbo = -((batch_size / num_train) * (entropy + cross_ent) + ell)
 
         # Build the leave one out loss function.
-        loo_loss = self._build_loo_loss(weights, means, covars, inducing_inputs,
-                                        kernel_chol, train_inputs, train_outputs)
+        loo_loss = self._build_loo_loss(
+            weights, means, covars, inducing_inputs,
+            kernel_chol, train_inputs, train_outputs)
 
         # Finally, build the prediction function.
-        predictions = self._build_predict(weights, means, covars, inducing_inputs,
-                                          kernel_chol, test_inputs)
+        predictions = self._build_predict(
+            weights, means, covars, inducing_inputs,
+            kernel_chol, test_inputs)
 
         return nelbo, loo_loss, predictions
 
     def _build_loo_loss(self, weights, means, covars, inducing_inputs,
                         kernel_chol, train_inputs, train_outputs):
-        kern_prods, kern_sums = self._build_interim_vals(kernel_chol, inducing_inputs, train_inputs)
+        kern_prods, kern_sums = self._build_interim_vals(
+            kernel_chol, inducing_inputs, train_inputs)
         loss = 0
         for i in xrange(self.num_components):
-            covar_input = covars[i, :, :] if self.diag_post else covars[i, :, :, :]
-            latent_samples = self._build_samples(kern_prods, kern_sums,
-                                                 means[i, :, :], covar_input)
-            loss += weights[i] * tf.reduce_mean(1.0 / (tf.exp(self.likelihood.log_cond_prob(
-                train_outputs, latent_samples)) + 1e-7), 0)
+            covar_input = (
+                covars[i, :, :]
+                if self.diag_post
+                else covars[i, :, :, :]
+            )
+            latent_samples = self._build_samples(
+                kern_prods, kern_sums,
+                means[i, :, :], covar_input)
+            loss += weights[i] * tf.reduce_mean(
+                1.0 / (tf.exp(
+                    self.likelihood.log_cond_prob(
+                        train_outputs, latent_samples
+                    )
+                ) + 1e-7),
+                0
+            )
         return tf.reduce_sum(tf.log(loss))
 
     def _build_predict(self, weights, means, covars, inducing_inputs,
@@ -389,4 +460,3 @@ class GaussianProcess(object):
         sample_means = tf.concat( sample_means,1)
         sample_vars = tf.concat(sample_vars,1)
         return sample_means, sample_vars
-
