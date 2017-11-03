@@ -73,10 +73,13 @@ class GaussianProcess(object):
                 self.num_latent,
                 self.num_inducing]))
         else:
-            init_vec = np.zeros([
-                self.num_components, self.num_latent] +
-                util.tri_vec_shape(self.num_inducing),
-                dtype=np.float32)
+            init_vec = np.zeros(
+                [
+                    self.num_components,
+                    self.num_latent
+                ] + util.tri_vec_shape(self.num_inducing),
+                dtype=np.float32
+            )
             self.raw_covars = tf.Variable(init_vec)
         self.raw_inducing_inputs = tf.Variable(
             inducing_inputs, dtype=tf.float32)
@@ -110,7 +113,7 @@ class GaussianProcess(object):
             self.num_train,
             self.test_inputs)
 
-        #config = tf.ConfigProto(
+        # config = tf.ConfigProto(
         # log_device_placement=True, allow_soft_placement=True)
         # Do all the tensorflow bookkeeping.
         self.session = tf.Session()
