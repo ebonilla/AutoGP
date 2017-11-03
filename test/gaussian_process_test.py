@@ -69,7 +69,7 @@ class TestSimpleFull(TestGaussianProcess):
                                            num_components=1,
                                            diag_post=False,
                                            num_samples=10)
-        cls.session.run(tf.initialize_all_variables())
+        cls.session.run(tf.global_variables_initializer())
 
     def test_simple_entropy(self):
         entropy = TestSimpleFull.entropy(weights=[1.0],
@@ -126,7 +126,7 @@ class TestSimpleFull(TestGaussianProcess):
                                                             train_inputs=[[1e-8]])
         self.assertAlmostEqual(kern_prods, 1e16, SIG_FIGS)
         self.assertAlmostEqual(kern_sums, 1 - 1e16, SIG_FIGS)
-        
+
     def test_large_interim_vals(self):
         kern_prods, kern_sums = TestSimpleFull.interim_vals(kernel_chol=[[[1e8]]],
                                                             inducing_inputs=[[[1e8]]],
@@ -186,7 +186,7 @@ class TestSimpleDiag(TestGaussianProcess):
                                            num_components=1,
                                            diag_post=True,
                                            num_samples=10)
-        cls.session.run(tf.initialize_all_variables())
+        cls.session.run(tf.global_variables_initializer())
 
     def test_simple_entropy(self):
         entropy = TestSimpleDiag.entropy(weights=[1.0],
@@ -261,7 +261,7 @@ class TestMultiFull(TestGaussianProcess):
                                            num_components=2,
                                            diag_post=False,
                                            num_samples=1)
-        cls.session.run(tf.initialize_all_variables())
+        cls.session.run(tf.global_variables_initializer())
 
     def test_entropy(self):
         entropy = TestMultiFull.entropy(weights=[0.7, 0.3],
@@ -391,4 +391,3 @@ class TestMultiFull(TestGaussianProcess):
                              [22539.0, 138197.0]])
         np.testing.assert_almost_equal(mean, true_mean, SIG_FIGS)
         np.testing.assert_almost_equal(var, true_var, SIG_FIGS)
-
