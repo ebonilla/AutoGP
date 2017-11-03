@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 import tensorflow as tf
 
-from autogp import util
 from . import kernel
 
 
@@ -22,7 +21,7 @@ class RadialBasis(kernel.Kernel):
     def kernel(self, points1, points2=None):
         if points2 is None:
             points2 = points1
-            white_noise = self.white * util.eye(tf.shape(points1)[0])
+            white_noise = self.white * tf.eye(tf.shape(points1)[0])
         else:
             white_noise = 0.0
 

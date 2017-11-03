@@ -25,10 +25,6 @@ import tensorflow as tf
 from tensorflow.python.framework import ops
 
 
-def eye(N):
-    return tf.diag(tf.ones(tf.stack([N, ]), dtype='float32'))
-
-
 def tri_vec_shape(N):
     return [N * (N + 1) // 2]
 
