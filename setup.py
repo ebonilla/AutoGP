@@ -13,7 +13,7 @@ def find_packages(path):
 
 REQUIRED = [
     'scikit-learn>=0.17.0',
-    'tensorflow>=1.1.0',
+    'tensorflow>=1.5.0',
 ]
 
 
