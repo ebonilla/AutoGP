@@ -1,5 +1,4 @@
 import copy
-
 import tensorflow as tf
 
 def init_list(init, dims):
