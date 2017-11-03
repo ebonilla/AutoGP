@@ -1,5 +1,11 @@
+from __future__ import division
 import copy
 import tensorflow as tf
+
+
+def tri_vec_shape(N):
+    return [N * (N + 1) // 2]
+
 
 def init_list(init, dims):
     def empty_list(dims):
