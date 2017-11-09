@@ -1,7 +1,7 @@
 # AutoGP: Automated Variational Inference for Gaussian Process Models
 An implementation of the model described in [AutoGP: Exploring the Capabilities and Limitations of Gaussian Process Models](https://arxiv.org/abs/1610.05392).
 
-The code was tested on Python 2.7 and [TensorFlow 0.12-1.2](https://www.tensorflow.org/get_started/os_setup).
+The code was tested on Python 2.7 and 3.6 and [TensorFlow 1.5](https://www.tensorflow.org/get_started/os_setup).
 
 # Authors
 The original code was mainly developed by
