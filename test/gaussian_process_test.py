@@ -12,6 +12,7 @@ from autogp import likelihoods
 
 SIG_FIGS = 5
 RTOL = 10**(-SIG_FIGS)
+ATOL = 10**(-SIG_FIGS)
 
 
 class TestGaussianProcess(unittest.TestCase):
@@ -198,10 +199,12 @@ class TestSimpleFull(TestGaussianProcess):
             real_kern_prods, train_inducing_distances.T
         ))
 
+        # We need atol here since we are testing for equality to zero
         np.testing.assert_allclose(
-            kern_prods[0], real_kern_prods, rtol=RTOL)
+            kern_prods[0], real_kern_prods,
+            rtol=RTOL, atol=ATOL)
         np.testing.assert_allclose(
-            kern_sums[0], real_kern_sums, rtol=RTOL)
+            kern_sums[0], real_kern_sums, rtol=RTOL, atol=ATOL)
 
     def test_simple_sample_info(self):
         mean, var = TestSimpleFull.sample_info(
