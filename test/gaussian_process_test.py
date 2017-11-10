@@ -11,6 +11,7 @@ from autogp import likelihoods
 
 
 SIG_FIGS = 5
+RTOL = 10**(-SIG_FIGS)
 
 
 class TestGaussianProcess(unittest.TestCase):
@@ -151,24 +152,24 @@ class TestSimpleFull(TestGaussianProcess):
             kernel_chol=[[[1.0]]],
             inducing_inputs=[[[1.0]]],
             train_inputs=[[1.0]])
-        np.testing.assert_approx_equal(kern_prods, 1.0, SIG_FIGS)
-        np.testing.assert_approx_equal(kern_sums, 0.0, SIG_FIGS)
+        np.testing.assert_allclose(kern_prods, 1.0, rtol=RTOL)
+        np.testing.assert_allclose(kern_sums, 0.0, rtol=RTOL)
 
     def test_small_interim_vals(self):
         kern_prods, kern_sums = TestSimpleFull.interim_vals(
             kernel_chol=[[[1e-8]]],
             inducing_inputs=[[[1e-8]]],
             train_inputs=[[1e-8]])
-        np.testing.assert_approx_equal(kern_prods, 1e16, SIG_FIGS)
-        np.testing.assert_approx_equal(kern_sums, 1 - 1e16, SIG_FIGS)
+        np.testing.assert_allclose(kern_prods, 1e16, rtol=RTOL)
+        np.testing.assert_allclose(kern_sums, 1 - 1e16, rtol=RTOL)
 
     def test_large_interim_vals(self):
         kern_prods, kern_sums = TestSimpleFull.interim_vals(
             kernel_chol=[[[1e8]]],
             inducing_inputs=[[[1e8]]],
             train_inputs=[[1e8]])
-        np.testing.assert_approx_equal(kern_prods, 1e-8, SIG_FIGS)
-        np.testing.assert_approx_equal(kern_sums, 1 - 1e-8, SIG_FIGS)
+        np.testing.assert_allclose(kern_prods, 1e-8, rtol=RTOL)
+        np.testing.assert_allclose(kern_sums, 1 - 1e-8, rtol=RTOL)
 
     def test_multiple_inputs_interim_vals(self):
         inducing_distances = np.array(
@@ -197,10 +198,10 @@ class TestSimpleFull(TestGaussianProcess):
             real_kern_prods, train_inducing_distances.T
         ))
 
-        np.testing.assert_approx_equal(
-            kern_prods[0], real_kern_prods, SIG_FIGS)
-        np.testing.assert_approx_equal(
-            kern_sums[0], real_kern_sums, SIG_FIGS)
+        np.testing.assert_allclose(
+            kern_prods[0], real_kern_prods, rtol=RTOL)
+        np.testing.assert_allclose(
+            kern_sums[0], real_kern_sums, rtol=RTOL)
 
     def test_simple_sample_info(self):
         mean, var = TestSimpleFull.sample_info(
@@ -208,8 +209,8 @@ class TestSimpleFull(TestGaussianProcess):
             kern_sums=[[3.0]],
             means=[[4.0]],
             covars=[[[5.0]]])
-        np.testing.assert_approx_equal(mean, 8.0, SIG_FIGS)
-        np.testing.assert_approx_equal(var, 103.0, SIG_FIGS)
+        np.testing.assert_allclose(mean, 8.0, rtol=RTOL)
+        np.testing.assert_allclose(var, 103.0, rtol=RTOL)
 
     def test_multi_sample_info(self):
         mean, var = TestSimpleFull.sample_info(
@@ -217,8 +218,8 @@ class TestSimpleFull(TestGaussianProcess):
             kern_sums=[[5.0, 6.0]],
             means=[[7.0, 8.0]],
             covars=[[[9.0, 10.0], [11.0, 12.0]]])
-        np.testing.assert_approx_equal(mean, [[23.0], [53.0]], SIG_FIGS)
-        np.testing.assert_approx_equal(var, [[2122.0], [11131.0]], SIG_FIGS)
+        np.testing.assert_allclose(mean, [[23.0], [53.0]], rtol=RTOL)
+        np.testing.assert_allclose(var, [[2122.0], [11131.0]], rtol=RTOL)
 
 
 class TestSimpleDiag(TestGaussianProcess):
@@ -250,7 +251,7 @@ class TestSimpleDiag(TestGaussianProcess):
         entropy = TestSimpleDiag.entropy(weights=[1.0],
                                          means=[[[1.0]]],
                                          covars=[[[1.0]]])
-        np.testing.assert_approx_equal(
+        np.testing.assert_allclose(
             entropy,
             0.5 * (np.log(2 * np.pi) + np.log(2.0)),
             SIG_FIGS)
@@ -259,7 +260,7 @@ class TestSimpleDiag(TestGaussianProcess):
         entropy = TestSimpleDiag.entropy(weights=[1.0],
                                          means=[[[1.0]]],
                                          covars=[[[1e-10]]])
-        np.testing.assert_approx_equal(
+        np.testing.assert_allclose(
             entropy,
             0.5 * (np.log(2 * np.pi) + np.log(2 * 1e-10)),
             SIG_FIGS)
@@ -268,7 +269,7 @@ class TestSimpleDiag(TestGaussianProcess):
         entropy = TestSimpleDiag.entropy(weights=[1.0],
                                          means=[[[1.0]]],
                                          covars=[[[1e10]]])
-        np.testing.assert_approx_equal(
+        np.testing.assert_allclose(
             entropy,
             0.5 * (np.log(2 * np.pi) + np.log(2 * 1e10)),
             SIG_FIGS)
@@ -318,8 +319,8 @@ class TestSimpleDiag(TestGaussianProcess):
             means=[[7.0, 8.0]],
             covars=[[9.0, 10.0]]
         )
-        np.testing.assert_approx_equal(mean, [[23.0], [53.0]], SIG_FIGS)
-        np.testing.assert_approx_equal(var, [[54.0], [247.0]], SIG_FIGS)
+        np.testing.assert_allclose(mean, [[23.0], [53.0]], rtol=RTOL)
+        np.testing.assert_allclose(var, [[54.0], [247.0]], rtol=RTOL)
 
 
 class TestMultiFull(TestGaussianProcess):
@@ -503,19 +504,19 @@ class TestMultiFull(TestGaussianProcess):
         np.testing.assert_allclose(
             kern_prods[0],
             a_1,
-            rtol=10**(-SIG_FIGS))
+            rtol=RTOL)
         np.testing.assert_allclose(
             kern_prods[1],
             a_2,
-            rtol=10**(-SIG_FIGS))
+            rtol=RTOL)
         np.testing.assert_allclose(
             kern_sums[0],
             np.diag(kxx - np.dot(a_1, kxz_1.T)),
-            rtol=10**(-SIG_FIGS))
+            rtol=RTOL)
         np.testing.assert_allclose(
             kern_sums[1],
             np.diag(kxx - np.dot(a_2, kxz_2.T)),
-            rtol=10**(-SIG_FIGS))
+            rtol=RTOL)
 
     def test_sample_info(self):
         mean, var = TestMultiFull.sample_info(
@@ -534,5 +535,5 @@ class TestMultiFull(TestGaussianProcess):
                               [95.0, 233.0]])
         true_var = np.array([[4634.0, 75224.0],
                              [22539.0, 138197.0]])
-        np.testing.assert_allclose(mean, true_mean, rtol=10**(-SIG_FIGS))
-        np.testing.assert_allclose(var, true_var, rtol=10**(-SIG_FIGS))
+        np.testing.assert_allclose(mean, true_mean, rtol=RTOL)
+        np.testing.assert_allclose(var, true_var, rtol=RTOL)

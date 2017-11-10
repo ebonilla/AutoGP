@@ -7,7 +7,7 @@ from autogp import kernels
 from ..gaussian_process_test import TestGaussianProcess
 
 SIG_FIGS = 5
-
+RTOL = 10**(-SIG_FIGS)
 
 class TestArcCosine(TestGaussianProcess):
 
