@@ -169,8 +169,8 @@ class TestSimpleFull(TestGaussianProcess):
             kernel_chol=[[[1e8]]],
             inducing_inputs=[[[1e8]]],
             train_inputs=[[1e8]])
-        np.testing.assert_allclose(kern_prods, 1e-8, rtol=RTOL)
-        np.testing.assert_allclose(kern_sums, 1 - 1e-8, rtol=RTOL)
+        np.testing.assert_allclose(kern_prods, 1e-8, rtol=RTOL, atol=ATOL)
+        np.testing.assert_allclose(kern_sums, 1 - 1e-8, rtol=RTOL, atol=ATOL)
 
     def test_multiple_inputs_interim_vals(self):
         inducing_distances = np.array(
