@@ -13,7 +13,11 @@ def find_packages(path):
 
 REQUIRED = [
     'scikit-learn>=0.17.0',
-    'tensorflow>=1.5.0',
+    # 'tensorflow>=1.5.0',  # waiting for release
+]
+
+DEV_REQUIRED = [
+    'nose',
 ]
 
 
@@ -27,6 +31,7 @@ setup(
     license='Apache',
     packages=find_packages('autogp'),
     install_requires=REQUIRED,
+    dev_requires=DEV_REQUIRED,
     cmdclass={
         # 'build_ext': custom_build_ext
     },

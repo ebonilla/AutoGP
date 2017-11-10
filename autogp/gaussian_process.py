@@ -3,6 +3,7 @@ from __future__ import absolute_import
 
 import numpy as np
 import tensorflow as tf
+import tensorflow.contrib
 from tensorflow.contrib.distributions import fill_triangular
 from . import util
 
