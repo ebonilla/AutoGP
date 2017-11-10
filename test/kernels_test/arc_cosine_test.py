@@ -14,7 +14,7 @@ class TestArcCosine(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         super(TestArcCosine, cls).setUpClass()
-        cls.session.run(tf.global_variables_initializer())
+        tf.Session().run(tf.global_variables_initializer())
 
     def kernel(self, points1, points2=None, degree=0, depth=1):
         arc_cosine = kernels.ArcCosine(degree, depth, white=0.0)

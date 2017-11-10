@@ -500,22 +500,22 @@ class TestMultiFull(TestGaussianProcess):
                                               [20.0, 61.0]]))
         a_1 = np.dot(kxz_1, kzz_inv1)
         a_2 = np.dot(kxz_2, kzz_inv2)
-        np.testing.assert_approx_equal(
+        np.testing.assert_allclose(
             kern_prods[0],
             a_1,
-            SIG_FIGS)
-        np.testing.assert_approx_equal(
+            rtol=10**(-SIG_FIGS))
+        np.testing.assert_allclose(
             kern_prods[1],
             a_2,
-            SIG_FIGS)
-        np.testing.assert_approx_equal(
+            rtol=10**(-SIG_FIGS))
+        np.testing.assert_allclose(
             kern_sums[0],
             np.diag(kxx - np.dot(a_1, kxz_1.T)),
-            SIG_FIGS)
-        np.testing.assert_approx_equal(
+            rtol=10**(-SIG_FIGS))
+        np.testing.assert_allclose(
             kern_sums[1],
             np.diag(kxx - np.dot(a_2, kxz_2.T)),
-            SIG_FIGS)
+            rtol=10**(-SIG_FIGS))
 
     def test_sample_info(self):
         mean, var = TestMultiFull.sample_info(
@@ -534,5 +534,5 @@ class TestMultiFull(TestGaussianProcess):
                               [95.0, 233.0]])
         true_var = np.array([[4634.0, 75224.0],
                              [22539.0, 138197.0]])
-        np.testing.assert_approx_equal(mean, true_mean, SIG_FIGS)
-        np.testing.assert_approx_equal(var, true_var, SIG_FIGS)
+        np.testing.assert_allclose(mean, true_mean, rtol=10**(-SIG_FIGS))
+        np.testing.assert_allclose(var, true_var, rtol=10**(-SIG_FIGS))
