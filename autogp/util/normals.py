@@ -28,6 +28,6 @@ class DiagNormal(Normal):
 
     def log_prob(self, val):
         dim = tf.to_float(tf.shape(self.mean)[0])
-        quad_form = tf.reduce_sum(self.covar * (val - self.mean) ** 2)
+        quad_form = tf.reduce_sum((val - self.mean) ** 2 / self.covar)
         return -0.5 * (dim * tf.log(2.0 * np.pi) + tf.reduce_sum(tf.log(self.covar)) + quad_form)
 
