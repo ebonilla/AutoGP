@@ -3,7 +3,6 @@ import unittest
 import numpy as np
 import tensorflow as tf
 
-from autogp import util
 from autogp import kernels
 
 
@@ -11,6 +10,12 @@ SIG_FIGS = 5
 
 
 class TestArcCosine(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super(TestArcCosine, cls).setUpClass()
+        cls.session.run(tf.global_variables_initializer())
+
     def kernel(self, points1, points2=None, degree=0, depth=1):
         arc_cosine = kernels.ArcCosine(degree, depth, white=0.0)
         if points2 is not None:
@@ -27,7 +32,7 @@ class TestArcCosine(unittest.TestCase):
         kern = self.kernel([[1.0, 0.0, 0.0],
                             [0.0, 1.0, 0.0],
                             [0.0, 0.0, 1.0]])
-        np.testing.assert_almost_equal(kern, [[1.0, 0.5, 0.5],
+        np.testing.assert_approx_equal(kern, [[1.0, 0.5, 0.5],
                                               [0.5, 1.0, 0.5],
                                               [0.5, 0.5, 1.0]])
 
@@ -35,7 +40,6 @@ class TestArcCosine(unittest.TestCase):
         kern = self.kernel([[3.0, 5.0, 2.0],
                             [-3.0, -5.0, -2.0],
                             [6.0, 10.0, 4.0]])
-        np.testing.assert_almost_equal(kern, [[1.0, 0.0, 1.0],
+        np.testing.assert_approx_equal(kern, [[1.0, 0.0, 1.0],
                                               [0.0, 1.0, 0.0],
                                               [1.0, 0.0, 1.0]])
-

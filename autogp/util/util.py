@@ -1,23 +1,29 @@
+from __future__ import division
 import copy
 
 import tensorflow as tf
+
+
+def tri_vec_shape(N):
+    return [N * (N + 1) // 2]
+
 
 def init_list(init, dims):
     def empty_list(dims):
         if not dims:
             return None
         else:
-            return [copy.deepcopy(empty_list(dims[1:])) for i in xrange(dims[0])]
+            return [copy.deepcopy(empty_list(dims[1:])) for i in range(dims[0])]
 
     def fill_list(dims, l):
         if len(dims) == 1:
-            for i in xrange(dims[0]):
+            for i in range(dims[0]):
                 if callable(init):
                     l[i] = init()
                 else:
                     l[i] = init
         else:
-            for i in xrange(dims[0]):
+            for i in range(dims[0]):
                 fill_list(dims[1:], l[i])
 
     l = empty_list(dims) 

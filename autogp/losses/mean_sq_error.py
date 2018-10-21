@@ -1,9 +1,11 @@
+from __future__ import absolute_import
 import numpy as np
-import loss
+from . import loss
+
 
 class RootMeanSqError(loss.Loss):
     def __init__(self, dout):
-        loss.Loss.__init__(self,dout)
+        loss.Loss.__init__(self, dout)
 
     def eval(self, ytrue, ypred):
         error_rate = np.sqrt(np.mean(np.square(ytrue - ypred)))

@@ -1,3 +1,5 @@
+from __future__ import division
+
 # Copyright 2016 James Hensman, alexggmatthews
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,12 +25,8 @@ import tensorflow as tf
 from tensorflow.python.framework import ops
 
 
-def eye(N):
-    return tf.diag(tf.ones(tf.stack([N, ]), dtype='float32'))
-
-
 def tri_vec_shape(N):
-    return [N * (N + 1) / 2]
+    return [N * (N + 1) // 2]
 
 
 _custom_op_module = tf.load_op_library(os.path.join(os.path.dirname(__file__),

@@ -15,4 +15,3 @@ class Kernel:
     @abc.abstractmethod
     def get_params(self):
         pass
-

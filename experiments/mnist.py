@@ -31,8 +31,8 @@ if __name__ == '__main__':
 
     # Setup initial values for the model.
     likelihood = likelihoods.Softmax()
-    kern = [kernels.RadialBasis(data.X.shape[1], lengthscale=10.0, input_scaling = IS_ARD) for i in xrange(10)]
-    # kern = [kernels.ArcCosine(X.shape[1], 2, 3, 5.0, 1.0, input_scaling=True) for i in xrange(10)] #RadialBasis(X.shape[1], input_scaling=True) for i in xrange(10)]
+    kern = [kernels.RadialBasis(data.X.shape[1], lengthscale=10.0, input_scaling = IS_ARD) for i in range(10)]
+    # kern = [kernels.ArcCosine(X.shape[1], 2, 3, 5.0, 1.0, input_scaling=True) for i in range(10)] #RadialBasis(X.shape[1], input_scaling=True) for i in range(10)]
 
     Z = init_z(data.X, NUM_INDUCING)
     m = autogp.GaussianProcess(likelihood, kern, Z, num_samples=NUM_SAMPLES)

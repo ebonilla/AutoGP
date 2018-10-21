@@ -67,9 +67,9 @@ Z = init_z(data.X, NUM_INDUCING)
 likelihood = likelihoods.Logistic()  # Setup initial values for the model.
 
 if KERNEL == 'arccosine':
-    kern = [kernels.ArcCosine(data.X.shape[1], degree=DEGREE, depth=DEPTH, lengthscale=LENGTHSCALE, std_dev=1.0, input_scaling=IS_ARD) for i in xrange(1)]
+    kern = [kernels.ArcCosine(data.X.shape[1], degree=DEGREE, depth=DEPTH, lengthscale=LENGTHSCALE, std_dev=1.0, input_scaling=IS_ARD) for i in range(1)]
 else:
-    kern = [kernels.RadialBasis(data.X.shape[1], lengthscale=LENGTHSCALE, input_scaling=IS_ARD) for i in xrange(1)]
+    kern = [kernels.RadialBasis(data.X.shape[1], lengthscale=LENGTHSCALE, input_scaling=IS_ARD) for i in range(1)]
 
 print("Using Kernel " + KERNEL)
 

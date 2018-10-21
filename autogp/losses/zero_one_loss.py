@@ -1,9 +1,11 @@
+from __future__ import absolute_import
 import numpy as np
-import loss
+from . import loss
+
 
 class ZeroOneLoss(loss.Loss):
     def __init__(self, dout):
-        loss.Loss.__init__(self,dout)
+        loss.Loss.__init__(self, dout)
 
     def eval(self, ytrue, ypred):
         if ytrue.shape[1] == 1:

@@ -1,13 +1,15 @@
+from __future__ import absolute_import
 import numpy as np
-import tensorflow as tf
 
 from tensorflow.contrib.learn.python.learn.datasets import base
-from tensorflow.contrib.learn.python.learn.datasets.mnist import extract_images, extract_labels
+from tensorflow.contrib.learn.python.learn.datasets.mnist import \
+    extract_images, extract_labels
 from tensorflow.python.framework import dtypes
 
-from dataset import DataSet
+from .dataset import DataSet
 
-def process_mnist(images, dtype = dtypes.float32, reshape=True):
+
+def process_mnist(images, dtype=dtypes.float32, reshape=True):
     if reshape:
         assert images.shape[3] == 1
         images = images.reshape(images.shape[0],
@@ -19,24 +21,27 @@ def process_mnist(images, dtype = dtypes.float32, reshape=True):
 
     return images
 
+
 def get_data_info(images):
     rows, cols = images.shape
     std = np.zeros(cols)
     mean = np.zeros(cols)
     for col in range(cols):
-        std[col] = np.std(images[:,col])
-        mean[col] = np.mean(images[:,col])
+        std[col] = np.std(images[:, col])
+        mean[col] = np.mean(images[:, col])
     return mean, std
+
 
 def standardize_data(images, means, stds):
     data = images.copy()
     rows, cols = data.shape
     for col in range(cols):
         if stds[col] == 0:
-            data[:,col] = (data[:,col] - means[col])
+            data[:, col] = (data[:, col] - means[col])
         else:
-            data[:,col] = (data[:,col] - means[col]) / stds[col]
+            data[:, col] = (data[:, col] - means[col]) / stds[col]
     return data
+
 
 def import_mnist(validation_size=0):
     """
@@ -85,7 +90,8 @@ def import_mnist(validation_size=0):
     # standardize data
     train_mean, train_std = get_data_info(train_images)
     train_images = standardize_data(train_images, train_mean, train_std)
-    validation_images = standardize_data(validation_images, train_mean, train_std)
+    validation_images = standardize_data(
+        validation_images, train_mean, train_std)
     test_images = standardize_data(test_images, train_mean, train_std)
 
     data = DataSet(train_images, train_labels)
@@ -93,4 +99,3 @@ def import_mnist(validation_size=0):
     val = DataSet(validation_images, validation_labels)
 
     return data, test, val
-
