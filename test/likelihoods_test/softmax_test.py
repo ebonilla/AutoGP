@@ -23,7 +23,7 @@ class TestSoftmax(unittest.TestCase):
 
     def test_single_prob(self):
         log_prob = self.log_prob([[1.0, 0.0]], [[[5.0, 2.0]]])
-        self.assertAlmostEqual(np.exp(log_prob), np.exp(5.0) / (np.exp(5.0) + np.exp(2.0)),
+        np.testing.assert_allclose(np.exp(log_prob), np.exp(5.0) / (np.exp(5.0) + np.exp(2.0)),
                                SIG_FIGS)
 
     def test_extreme_probs(self):
@@ -35,7 +35,10 @@ class TestSoftmax(unittest.TestCase):
                                    [1e10, -1e10]]])
         true_probs = np.array([[1.0, 1.0],
                                [0.0, 0.0]])
-        np.testing.assert_approx_equal(np.exp(log_prob), true_probs, SIG_FIGS)
+        np.testing.assert_allclose(
+            np.exp(log_prob),
+            true_probs,
+            rtol=10**(-SIG_FIGS))
 
     def test_multi_probs(self):
         log_prob = self.log_prob([[1.0, 0.0, 0.0],
@@ -53,5 +56,7 @@ class TestSoftmax(unittest.TestCase):
                                [np.exp(10.0) / (np.exp(10.0) + np.exp(11.0) + np.exp(12.0)),
                                 np.exp(14.0) / (np.exp(13.0) + np.exp(14.0) + np.exp(15.0)),
                                 np.exp(18.0) / (np.exp(16.0) + np.exp(17.0) + np.exp(18.0))]])
-        np.testing.assert_approx_equal(np.exp(log_prob), true_probs, SIG_FIGS)
-
+        np.testing.assert_allclose(
+            np.exp(log_prob),
+            true_probs,
+            rtol=10**(-SIG_FIGS))

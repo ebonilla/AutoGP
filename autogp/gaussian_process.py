@@ -3,7 +3,8 @@ from __future__ import absolute_import
 
 import numpy as np
 import tensorflow as tf
-
+import tensorflow.contrib
+from tensorflow.contrib.distributions import fill_triangular
 from . import util
 
 
@@ -276,7 +277,7 @@ class GaussianProcess(object):
             # over the cholesky space internally.
             covars_list = [None] * self.num_components
             for i in range(self.num_components):
-                mat = util.vec_to_tri(raw_covars[i, :, :])
+                mat = fill_triangular(raw_covars[i, :, :])
                 diag_mat = tf.matrix_diag(tf.matrix_diag_part(mat))
                 exp_diag_mat = tf.matrix_diag(tf.exp(tf.matrix_diag_part(mat)))
                 covars_list[i] = mat - diag_mat + exp_diag_mat
